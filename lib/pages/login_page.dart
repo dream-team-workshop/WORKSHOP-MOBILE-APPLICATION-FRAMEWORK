@@ -218,6 +218,7 @@ class _LoginPageState extends State<LoginPage> {
         margin: const EdgeInsets.only(top: 15),
         child: TextButton(
           onPressed: () {
+            Navigator.pushNamed(context, '/home');
           },
           style: TextButton.styleFrom(
             backgroundColor: primaryColor,
@@ -325,21 +326,25 @@ class _LoginPageState extends State<LoginPage> {
       body: SafeArea(
         child: Container(
           margin: EdgeInsets.symmetric(horizontal: defaultMargin),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              buildHeaderImage(),
-              buildHeaderTittle(),
-              buildEmailInput(),
-              buildPasswordInput(),
-              buildForgotPassword(),
-              buildRememberMe(),
-              buildLoginButton(),
-              buildDivider(),
-              buildOtherLoginMethodsSection(),
-              const Spacer(),
-              buildFooter(),
-            ],
+          child: SingleChildScrollView(
+            child: Container(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  buildHeaderImage(),
+                  buildHeaderTittle(),
+                  buildEmailInput(),
+                  buildPasswordInput(),
+                  buildForgotPassword(),
+                  buildRememberMe(),
+                  buildLoginButton(),
+                  buildDivider(),
+                  buildOtherLoginMethodsSection(),
+                  const SizedBox(height: 25),
+                  buildFooter(),
+                ],
+              ),
+            ),
           ),
         ),
       ),

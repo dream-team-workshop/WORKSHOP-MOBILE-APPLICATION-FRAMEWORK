@@ -280,7 +280,9 @@ class _RegisterPageState extends State<RegisterPage> {
         width: double.infinity,
         margin: const EdgeInsets.only(top: 15),
         child: TextButton(
-          onPressed: () {},
+          onPressed: () {
+            Navigator.pushNamed(context, '/home');
+          },
           style: TextButton.styleFrom(
             backgroundColor: primaryColor,
             shape: RoundedRectangleBorder(

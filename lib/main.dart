@@ -1,3 +1,4 @@
+import 'package:brk_mobile/pages/home/main_page.dart';
 import 'package:brk_mobile/pages/login_page.dart';
 import 'package:brk_mobile/pages/register_page.dart';
 import 'package:flutter/material.dart';
@@ -15,6 +16,7 @@ class MyApp extends StatelessWidget {
         '/': (context) => SplashPage(),
         '/login': (context) => LoginPage(),
         '/register': (context) => RegisterPage(),
+        '/home': (context) => MainPage(),
       },
     );
   }
