@@ -1,3 +1,4 @@
+import 'package:brk_mobile/pages/detail_chat_page.dart';
 import 'package:brk_mobile/pages/home/main_page.dart';
 import 'package:brk_mobile/pages/login_page.dart';
 import 'package:brk_mobile/pages/register_page.dart';
@@ -17,6 +18,7 @@ class MyApp extends StatelessWidget {
         '/login': (context) => LoginPage(),
         '/register': (context) => RegisterPage(),
         '/home': (context) => MainPage(),
+        '/detail-chat': (context) => DetailChatPage(),
       },
     );
   }
