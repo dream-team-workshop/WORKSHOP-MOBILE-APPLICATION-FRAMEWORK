@@ -27,7 +27,7 @@ class ChatPage extends StatelessWidget {
     Widget emptyChat() {
       return Expanded(
         child: Container(
-            color: accentColor,
+            color: whiteColor,
             width: double.infinity,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -86,7 +86,7 @@ class ChatPage extends StatelessWidget {
       return Expanded(
         child: Container(
           width: double.infinity,
-          color: accentColor,
+          color: whiteColor,
           child: ListView(
             padding: EdgeInsets.symmetric(
               horizontal: defaultMargin,
