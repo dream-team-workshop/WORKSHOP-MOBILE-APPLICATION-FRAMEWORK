@@ -1,4 +1,5 @@
 import 'package:brk_mobile/pages/detail_chat_page.dart';
+import 'package:brk_mobile/pages/edit_profile.dart';
 import 'package:brk_mobile/pages/home/main_page.dart';
 import 'package:brk_mobile/pages/login_page.dart';
 import 'package:brk_mobile/pages/register_page.dart';
@@ -19,6 +20,7 @@ class MyApp extends StatelessWidget {
         '/register': (context) => RegisterPage(),
         '/home': (context) => MainPage(),
         '/detail-chat': (context) => DetailChatPage(),
+        '/edit-profile': (context) => EditProfilePage(),
       },
     );
   }
