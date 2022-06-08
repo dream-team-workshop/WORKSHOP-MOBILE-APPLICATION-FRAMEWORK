@@ -1,12 +1,16 @@
 import 'package:brk_mobile/theme.dart';
 import 'package:brk_mobile/widgets/product_tile.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart';
 import 'package:brk_mobile/widgets/product_card.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
   Widget header() {
     return Container(
       margin: EdgeInsets.only(
@@ -39,12 +43,13 @@ class HomePage extends StatelessWidget {
           Container(
             width: 54,
             height: 54,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              image: DecorationImage(
-                image: AssetImage(
-                  'assets/images/icon_google.png',
-                ),
+            child: GestureDetector(
+              onTap: () {
+                Navigator.pushNamed(context, '/cart');
+              },
+              child: Icon(
+                Icons.shopping_cart,
+                size: 30,
               ),
             ),
           ),

@@ -12,6 +12,7 @@ Color whiteColor = Colors.white;
 Color backgroundColor1 = Colors.white;
 Color backgroundColor2 = Color(0XFFF0F0F3);
 Color backgroundColor3 = Color(0XFFF1F0F2);
+Color backgroundColor4 = Color(0XFFECEDEF);
 Color transparentColor = Colors.transparent;
 
 TextStyle primaryTextStyle = GoogleFonts.poppins(

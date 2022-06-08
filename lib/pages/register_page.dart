@@ -1,16 +1,21 @@
 import 'package:brk_mobile/pages/login_page.dart';
+import 'package:brk_mobile/providers/auth_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:brk_mobile/theme.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 
 class RegisterPage extends StatefulWidget {
-  const RegisterPage({super.key});
-
   @override
   State<RegisterPage> createState() => _RegisterPageState();
 }
 
 class _RegisterPageState extends State<RegisterPage> {
+  TextEditingController nameController = TextEditingController(text: '');
+  TextEditingController usernameController = TextEditingController(text: '');
+  TextEditingController emailController = TextEditingController(text: '');
+  TextEditingController passwordController = TextEditingController(text: '');
+
   bool _passwordVisible = false;
 
   @override
@@ -20,6 +25,19 @@ class _RegisterPageState extends State<RegisterPage> {
 
   @override
   Widget build(BuildContext context) {
+    AuthProvider authProvider = Provider.of<AuthProvider>(context);
+    // Handle Register
+    handleRegister() async {
+      if (await authProvider.register(
+        name: nameController.text,
+        username: usernameController.text,
+        email: emailController.text,
+        password: passwordController.text,
+      )) {
+        Navigator.pushNamed(context, '/home');
+      }
+    }
+
     // Header Image
     Widget buildHeaderImage() {
       return Center(
@@ -67,6 +85,7 @@ class _RegisterPageState extends State<RegisterPage> {
             borderRadius: BorderRadius.circular(12),
           ),
           child: TextFormField(
+            controller: nameController,
             showCursor: true,
             keyboardType: TextInputType.text,
             cursorColor: primaryColor,
@@ -107,6 +126,7 @@ class _RegisterPageState extends State<RegisterPage> {
             borderRadius: BorderRadius.circular(12),
           ),
           child: TextFormField(
+            controller: usernameController,
             showCursor: true,
             keyboardType: TextInputType.text,
             cursorColor: primaryColor,
@@ -147,6 +167,7 @@ class _RegisterPageState extends State<RegisterPage> {
             borderRadius: BorderRadius.circular(12),
           ),
           child: TextFormField(
+            controller: emailController,
             showCursor: true,
             keyboardType: TextInputType.text,
             cursorColor: primaryColor,
@@ -187,6 +208,7 @@ class _RegisterPageState extends State<RegisterPage> {
             borderRadius: BorderRadius.circular(12),
           ),
           child: TextFormField(
+            controller: passwordController,
             obscureText: !_passwordVisible,
             showCursor: true,
             cursorColor: primaryColor,
@@ -280,9 +302,7 @@ class _RegisterPageState extends State<RegisterPage> {
         width: double.infinity,
         margin: const EdgeInsets.only(top: 15),
         child: TextButton(
-          onPressed: () {
-            Navigator.pushNamed(context, '/home');
-          },
+          onPressed: handleRegister,
           style: TextButton.styleFrom(
             backgroundColor: primaryColor,
             shape: RoundedRectangleBorder(
