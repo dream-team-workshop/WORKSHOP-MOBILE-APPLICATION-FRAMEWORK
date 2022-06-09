@@ -1,6 +1,9 @@
 import 'package:brk_mobile/pages/register_page.dart';
+import 'package:brk_mobile/providers/auth_provider.dart';
 import 'package:brk_mobile/theme.dart';
+import 'package:brk_mobile/widgets/loading_button.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -13,6 +16,11 @@ class _LoginPageState extends State<LoginPage> {
   bool _passwordVisible = false;
   bool _isRememberMe = false;
 
+  TextEditingController emailController = TextEditingController(text: '');
+  TextEditingController passwordController = TextEditingController(text: '');
+
+  bool _isLoading = false;
+
   @override
   void initState() {
     super.initState();
@@ -20,6 +28,34 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
+    AuthProvider authProvider = Provider.of<AuthProvider>(context);
+    // Handle Register
+    handleLogin() async {
+      setState(() {
+        _isLoading = true;
+      });
+
+      if (await authProvider.login(
+        email: emailController.text,
+        password: passwordController.text,
+      )) {
+        Navigator.pushNamed(context, '/home');
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            backgroundColor: Colors.red,
+            content: Text(
+              'Gagal Login!',
+              textAlign: TextAlign.center,
+            ),
+          ),
+        );
+      }
+
+      setState(() {
+        _isLoading = false;
+      });
+    }
 
     // Header Image
     Widget buildHeaderImage() {
@@ -75,6 +111,7 @@ class _LoginPageState extends State<LoginPage> {
             borderRadius: BorderRadius.circular(12),
           ),
           child: TextFormField(
+            controller: emailController,
             showCursor: true,
             keyboardType: TextInputType.text,
             cursorColor: primaryColor,
@@ -115,6 +152,7 @@ class _LoginPageState extends State<LoginPage> {
             borderRadius: BorderRadius.circular(12),
           ),
           child: TextFormField(
+            controller: passwordController,
             obscureText: !_passwordVisible,
             showCursor: true,
             cursorColor: primaryColor,
@@ -217,9 +255,7 @@ class _LoginPageState extends State<LoginPage> {
         width: double.infinity,
         margin: const EdgeInsets.only(top: 15),
         child: TextButton(
-          onPressed: () {
-            Navigator.pushNamed(context, '/home');
-          },
+          onPressed: handleLogin,
           style: TextButton.styleFrom(
             backgroundColor: primaryColor,
             shape: RoundedRectangleBorder(
@@ -302,10 +338,9 @@ class _LoginPageState extends State<LoginPage> {
             InkWell(
               onTap: () {
                 Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => RegisterPage()),
-                        );
+                  context,
+                  MaterialPageRoute(builder: (context) => RegisterPage()),
+                );
               },
               child: Text(
                 "Register",
@@ -337,7 +372,7 @@ class _LoginPageState extends State<LoginPage> {
                   buildPasswordInput(),
                   buildForgotPassword(),
                   buildRememberMe(),
-                  buildLoginButton(),
+                  _isLoading ? LoadingButton() : buildLoginButton(),
                   buildDivider(),
                   buildOtherLoginMethodsSection(),
                   const SizedBox(height: 25),

@@ -1,11 +1,18 @@
+import 'package:brk_mobile/models/user_model.dart';
+import 'package:brk_mobile/providers/auth_provider.dart';
 import 'package:brk_mobile/theme.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key});
 
   @override
   Widget build(BuildContext context) {
+
+    AuthProvider authProvider = Provider.of<AuthProvider>(context);
+    UserModel user = authProvider.user;
+    
     Widget buildHeader() {
       return AppBar(
         backgroundColor: whiteColor,
@@ -14,11 +21,12 @@ class ProfilePage extends StatelessWidget {
         flexibleSpace: SafeArea(
             child: Container(
           padding: EdgeInsets.all(
-            defaultMargin,
+            25.0,
           ),
           child: Row(
             children: [
               ClipRRect(
+                // child: Image.network(user.profilePhotoUrl!),
                 child: Image.asset(
                   'assets/images/img_profile.png',
                   width: 60,
@@ -32,14 +40,14 @@ class ProfilePage extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Hallo, User',
+                      'Hallo, ${user.name}',
                       style: primaryTextStyle.copyWith(
-                        fontSize: 22.0,
+                        fontSize: 20.0,
                         fontWeight: semiBold,
                       ),
                     ),
                     Text(
-                      '@username',
+                      '@${user.username}',
                       style: subtitleTextStyle.copyWith(
                         fontSize: 16.0,
                       ),

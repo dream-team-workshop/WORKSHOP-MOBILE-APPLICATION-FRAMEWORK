@@ -1,5 +1,6 @@
 import 'package:brk_mobile/pages/login_page.dart';
 import 'package:brk_mobile/providers/auth_provider.dart';
+import 'package:brk_mobile/widgets/loading_button.dart';
 import 'package:flutter/material.dart';
 import 'package:brk_mobile/theme.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -18,6 +19,8 @@ class _RegisterPageState extends State<RegisterPage> {
 
   bool _passwordVisible = false;
 
+  bool _isLoading = false;
+
   @override
   void initState() {
     super.initState();
@@ -28,6 +31,10 @@ class _RegisterPageState extends State<RegisterPage> {
     AuthProvider authProvider = Provider.of<AuthProvider>(context);
     // Handle Register
     handleRegister() async {
+      setState(() {
+        _isLoading = true;
+      });
+
       if (await authProvider.register(
         name: nameController.text,
         username: usernameController.text,
@@ -35,7 +42,21 @@ class _RegisterPageState extends State<RegisterPage> {
         password: passwordController.text,
       )) {
         Navigator.pushNamed(context, '/home');
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            backgroundColor: Colors.red,
+            content: Text(
+              'Gagal Register!',
+              textAlign: TextAlign.center,
+            ),
+          ),
+        );
       }
+
+      setState(() {
+        _isLoading = false;
+      });
     }
 
     // Header Image
@@ -370,7 +391,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   const SizedBox(
                     height: 20,
                   ),
-                  buildRegisterButton(),
+                  _isLoading ? LoadingButton() : buildRegisterButton(),
                   const SizedBox(
                     height: 25,
                   ),

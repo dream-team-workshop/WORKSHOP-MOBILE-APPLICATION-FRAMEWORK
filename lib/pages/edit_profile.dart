@@ -1,14 +1,17 @@
+import 'package:brk_mobile/models/user_model.dart';
+import 'package:brk_mobile/providers/auth_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:brk_mobile/theme.dart';
+import 'package:provider/provider.dart';
 
 class EditProfilePage extends StatelessWidget {
   const EditProfilePage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    Widget buildHeader() {
-      return AppBar();
-    }
+    
+    AuthProvider authProvider = Provider.of<AuthProvider>(context);
+    UserModel user = authProvider.user;
 
     Widget buildNameInput() {
       return Container(
@@ -31,7 +34,7 @@ class EditProfilePage extends StatelessWidget {
                 fontWeight: medium,
               ),
               decoration: InputDecoration(
-                hintText: 'Vladimir Putin',
+                hintText: user.name,
                 hintStyle: primaryTextStyle.copyWith(
                   fontSize: 14,
                   fontWeight: light,
@@ -69,7 +72,7 @@ class EditProfilePage extends StatelessWidget {
                 fontWeight: medium,
               ),
               decoration: InputDecoration(
-                hintText: '@vladputin',
+                hintText: '@${user.username}',
                 hintStyle: primaryTextStyle.copyWith(
                   fontSize: 14,
                   fontWeight: light,
@@ -107,7 +110,7 @@ class EditProfilePage extends StatelessWidget {
                 fontWeight: medium,
               ),
               decoration: InputDecoration(
-              hintText: 'vladimir.putin@gmail.com',
+              hintText: user.email,
                 hintStyle: primaryTextStyle.copyWith(
                   fontSize: 14,
                   fontWeight: light,
@@ -141,6 +144,7 @@ class EditProfilePage extends StatelessWidget {
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 image: DecorationImage(
+                  // image: NetworkImage(user.profilePhotoUrl!),
                   image: AssetImage('assets/images/img_profile.png'),
                   fit: BoxFit.cover,
                 ),
