@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "631581183838",
+    "project_id": "coffein-76105",
+    "storage_bucket": "coffein-76105.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:631581183838:android:4f6425170d676bbb1749cf",
+        "android_client_info": {
+          "package_name": "com.coffein.brk_mobile"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "631581183838-cj38a5498m5j6uju7rdurqcmju6tmd8a.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAIRjBI2JJYIyy3Hxt2m7kB6uosDpeAMgY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "631581183838-cj38a5498m5j6uju7rdurqcmju6tmd8a.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
