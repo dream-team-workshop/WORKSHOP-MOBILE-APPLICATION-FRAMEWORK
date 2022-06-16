@@ -1,14 +1,14 @@
 import 'package:brk_mobile/models/user_model.dart';
 import 'package:brk_mobile/providers/auth_provider.dart';
+import 'package:brk_mobile/providers/product_provider.dart';
 import 'package:brk_mobile/theme.dart';
 import 'package:brk_mobile/widgets/product_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:brk_mobile/widgets/product_card.dart';
 import 'package:provider/provider.dart';
+import 'dart:core';
 
 class HomePage extends StatefulWidget {
-  const HomePage({super.key});
-
   @override
   State<HomePage> createState() => _HomePageState();
 }
@@ -18,6 +18,8 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     AuthProvider authProvider = Provider.of<AuthProvider>(context);
     UserModel user = authProvider.user;
+
+    ProductProvider productProvider = Provider.of<ProductProvider>(context);
 
     Widget header() {
       return Container(
@@ -44,8 +46,7 @@ class _HomePageState extends State<HomePage> {
               width: 54,
               height: 54,
               child: GestureDetector(
-                onTap: () {
-                },
+                onTap: () {},
                 child: Icon(
                   Icons.person,
                   size: 30,
@@ -239,11 +240,9 @@ class _HomePageState extends State<HomePage> {
                 width: defaultMargin,
               ),
               Row(
-                children: [
-                  ProductCard(),
-                  ProductCard(),
-                  ProductCard(),
-                ],
+                children: productProvider.products
+                    .map((product) => ProductCard(product))
+                    .toList(),
               ),
             ],
           ),
@@ -274,12 +273,11 @@ class _HomePageState extends State<HomePage> {
           top: 14,
         ),
         child: Column(
-          children: [
-            ProductTile(),
-            ProductTile(),
-            ProductTile(),
-            ProductTile(),
-          ],
+          children: productProvider.products
+              .map(
+                (product) => ProductTile(product),
+              )
+              .toList(),
         ),
       );
     }

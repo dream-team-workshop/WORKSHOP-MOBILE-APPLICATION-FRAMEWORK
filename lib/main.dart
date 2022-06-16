@@ -6,6 +6,8 @@ import 'package:brk_mobile/pages/login_page.dart';
 import 'package:brk_mobile/pages/product_page.dart';
 import 'package:brk_mobile/pages/register_page.dart';
 import 'package:brk_mobile/providers/auth_provider.dart';
+import 'package:brk_mobile/providers/product_provider.dart';
+import 'package:brk_mobile/services/product_service.dart';
 import 'package:flutter/material.dart';
 import 'package:brk_mobile/pages/splash_page.dart';
 import 'package:provider/provider.dart';
@@ -17,11 +19,16 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    ProductService().getProducts().then((value) => print("value: $value"));
+
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(
           create: (context) => AuthProvider(),
         ),
+        ChangeNotifierProvider(
+          create: (context) => ProductProvider(),
+        )
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

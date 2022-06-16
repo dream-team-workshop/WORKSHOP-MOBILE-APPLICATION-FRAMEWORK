@@ -1,8 +1,11 @@
+import 'package:brk_mobile/models/product_model.dart';
+import 'package:brk_mobile/pages/product_page.dart';
 import 'package:brk_mobile/theme.dart';
 import 'package:flutter/material.dart';
 
 class ProductCard extends StatelessWidget {
-  const ProductCard({super.key});
+  final ProductModel product;
+  ProductCard(this.product);
 
   @override
   Widget build(BuildContext context) {
@@ -28,8 +31,9 @@ class ProductCard extends StatelessWidget {
             const SizedBox(
               height: 30,
             ),
-            Image.asset(
-              'assets/images/logo_coffein.png',
+            Image.network(
+              // 'assets/images/logo_coffein.png',
+              product.galleries![0].url!,
               height: 150,
               width: 215,
               fit: BoxFit.cover,
@@ -42,7 +46,7 @@ class ProductCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Panas',
+                    product.category!.name!,
                     style: primaryTextStyle.copyWith(
                       fontSize: 12,
                       color: Colors.white,
@@ -52,7 +56,7 @@ class ProductCard extends StatelessWidget {
                     height: 6,
                   ),
                   Text(
-                    'Coffe Latte',
+                    '${product.name}',
                     style: blackTextStyle.copyWith(
                       fontSize: 18,
                       fontWeight: semiBold,
@@ -63,7 +67,7 @@ class ProductCard extends StatelessWidget {
                     height: 6,
                   ),
                   Text(
-                    'Rp. 15.000',
+                    'Rp. ${product.price}',
                     style: primaryTextStyle.copyWith(
                       fontSize: 14,
                       fontWeight: medium,

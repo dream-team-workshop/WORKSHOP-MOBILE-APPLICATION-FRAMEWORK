@@ -1,8 +1,10 @@
+import 'package:brk_mobile/models/product_model.dart';
 import 'package:brk_mobile/theme.dart';
 import 'package:flutter/material.dart';
 
 class ProductTile extends StatelessWidget {
-  const ProductTile({super.key});
+  final ProductModel product;
+  ProductTile(this.product);
 
   @override
   Widget build(BuildContext context) {
@@ -20,8 +22,8 @@ class ProductTile extends StatelessWidget {
           children: [
             ClipRRect(
               borderRadius: BorderRadius.circular(20),
-              child: Image.asset(
-                'assets/images/logo_coffein.png',
+              child: Image.network(
+                product.galleries![2].url!,
                 width: 120,
                 height: 120,
                 fit: BoxFit.cover,

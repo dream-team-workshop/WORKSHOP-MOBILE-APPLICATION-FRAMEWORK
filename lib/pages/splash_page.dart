@@ -1,6 +1,8 @@
 import 'dart:async';
 
+import 'package:brk_mobile/providers/product_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class SplashPage extends StatefulWidget {
   const SplashPage({super.key});
@@ -12,9 +14,19 @@ class SplashPage extends StatefulWidget {
 class _SplashPageState extends State<SplashPage> {
   @override
   void initState() {
-    Timer(Duration(seconds: 3),
-        (() => Navigator.pushReplacementNamed(context, '/login')));
+    getInit();
+
     super.initState();
+  }
+
+  getInit() async {
+    await Provider.of<ProductProvider>(context, listen: false).getProducts;
+
+    Navigator.pushReplacementNamed(context, '/login');
+    // Timer(
+    //   Duration(seconds: 3),
+    //   (() => Navigator.pushReplacementNamed(context, '/login')),
+    // );
   }
 
   @override
