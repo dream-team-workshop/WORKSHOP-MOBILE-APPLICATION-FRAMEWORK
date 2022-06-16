@@ -15,8 +15,8 @@ class ProductProvider with ChangeNotifier {
   Future<void> getProducts() async {
     try {
       List<ProductModel> products = await ProductService().getProducts();
-      _products = products; 
-      print(products);
+      _products = products;
+      notifyListeners();
     } catch (e) {
       print(e);
     }

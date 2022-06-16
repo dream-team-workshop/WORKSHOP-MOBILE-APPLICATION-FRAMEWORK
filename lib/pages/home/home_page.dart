@@ -20,6 +20,7 @@ class _HomePageState extends State<HomePage> {
     UserModel user = authProvider.user;
 
     ProductProvider productProvider = Provider.of<ProductProvider>(context);
+    // productProvider.getProducts();
 
     Widget header() {
       return Container(
@@ -239,11 +240,14 @@ class _HomePageState extends State<HomePage> {
               SizedBox(
                 width: defaultMargin,
               ),
-              Row(
-                children: productProvider.products
-                    .map((product) => ProductCard(product))
-                    .toList(),
-              ),
+              Consumer<ProductProvider>(
+                  builder: (context, productProvider, child) {
+                return Row(
+                  children: productProvider.products.map((product) {
+                    return ProductCard(product);
+                  }).toList(),
+                );
+              }),
             ],
           ),
         ),
@@ -269,17 +273,18 @@ class _HomePageState extends State<HomePage> {
 
     Widget newArrivals() {
       return Container(
-        margin: EdgeInsets.only(
-          top: 14,
-        ),
-        child: Column(
-          children: productProvider.products
-              .map(
-                (product) => ProductTile(product),
-              )
-              .toList(),
-        ),
-      );
+          margin: EdgeInsets.only(
+            top: 14,
+          ),
+          child: Consumer<ProductProvider>(
+            builder: (context, productModel, child) => Column(
+              children: productModel.products
+                  .map(
+                    (product) => ProductTile(product),
+                  )
+                  .toList(),
+            ),
+          ));
     }
 
     return ListView(

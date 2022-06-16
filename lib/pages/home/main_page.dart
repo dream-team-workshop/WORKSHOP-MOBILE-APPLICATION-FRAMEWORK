@@ -38,7 +38,6 @@ class _MainPageState extends State<MainPage> {
               backgroundColor: backgroundColor2,
               currentIndex: currentIndex,
               onTap: (value) {
-                print(value);
                 setState(() {
                   currentIndex = value;
                 });

@@ -23,7 +23,7 @@ class ProductTile extends StatelessWidget {
             ClipRRect(
               borderRadius: BorderRadius.circular(20),
               child: Image.network(
-                product.galleries![2].url!,
+                product.galleries![0].url!,
                 width: 120,
                 height: 120,
                 fit: BoxFit.cover,
@@ -37,7 +37,7 @@ class ProductTile extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'kategori',
+                    product.category!.name.toString(),
                     style: subtitleTextStyle.copyWith(
                       fontSize: 12,
                     ),
@@ -46,7 +46,7 @@ class ProductTile extends StatelessWidget {
                     height: 6,
                   ),
                   Text(
-                    'Nama Produk',
+                    product.name!,
                     style: primaryTextStyle.copyWith(
                       fontSize: 16,
                       fontWeight: semiBold,
@@ -56,7 +56,7 @@ class ProductTile extends StatelessWidget {
                     height: 6,
                   ),
                   Text(
-                    'harga',
+                    product.price!,
                     style: primaryTextStyle.copyWith(
                       fontWeight: medium,
                     ),
