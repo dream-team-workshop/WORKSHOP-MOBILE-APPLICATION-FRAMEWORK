@@ -1,12 +1,17 @@
+import 'package:brk_mobile/providers/wishlist_provider.dart';
 import 'package:brk_mobile/theme.dart';
 import 'package:brk_mobile/widgets/wishlist_card.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class FavoritePage extends StatelessWidget {
   const FavoritePage({super.key});
 
   @override
   Widget build(BuildContext context) {
+
+    WishlistProvider wishlistProvider = Provider.of<WishlistProvider>(context);
+
     Widget buildHeader() {
       return AppBar(
         backgroundColor: primaryColor,
@@ -90,11 +95,7 @@ class FavoritePage extends StatelessWidget {
             padding: EdgeInsets.symmetric(
               horizontal: 20.0,
             ),
-            children: [
-              WishlistCard(),
-              WishlistCard(),
-              WishlistCard(),
-            ],
+            children: wishlistProvider.wishlist.map((product) => WishlistCard(product)).toList(),
           ),
         ),
       );
@@ -104,7 +105,7 @@ class FavoritePage extends StatelessWidget {
       children: [
         buildHeader(),
         // buildEmptyWishlist(),
-        buildContent(),
+        wishlistProvider.wishlist.length == 0 ? buildEmptyWishlist() : buildContent(),
       ],
     );
   }

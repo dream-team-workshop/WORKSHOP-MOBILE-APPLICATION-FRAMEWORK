@@ -1,11 +1,18 @@
+import 'package:brk_mobile/models/product_model.dart';
+import 'package:brk_mobile/providers/wishlist_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:brk_mobile/theme.dart';
+import 'package:provider/provider.dart';
 
 class WishlistCard extends StatelessWidget {
-  const WishlistCard({super.key});
+  final ProductModel product;
+  WishlistCard(this.product);
 
   @override
   Widget build(BuildContext context) {
+
+    WishlistProvider wishlistProvider = Provider.of<WishlistProvider>(context);
+
     return Container(
       margin: EdgeInsets.only(top: 20.0),
       padding: EdgeInsets.only(
@@ -21,10 +28,11 @@ class WishlistCard extends StatelessWidget {
       child: Row(
         children: [
           ClipRRect(
-            borderRadius: BorderRadius.circular(12.0),
-            child: Image.asset(
-              'assets/images/img_product_chat.png',
-              width: 60.0,
+            borderRadius: BorderRadius.circular(10.0),
+            child: Image.network(
+              // 'assets/images/img_product_chat.png',
+              product.galleries![0].url!,
+              width: 65.0,
             ),
           ),
           const SizedBox(
@@ -35,21 +43,28 @@ class WishlistCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Cinnamon Doice Latte',
+                  // 'Cinnamon Doice Latte',
+                  product.name!,
                   style: primaryTextStyle.copyWith(
                     fontWeight: semiBold,
                   ),
                 ),
                 Text(
-                  'Rp. 30.000',
+                  // 'Rp. 30.000',
+                  'Rp. ${product.price}',
                   style: secondaryTextStyle,
                 ),
               ],
             ),
           ),
-          Image.asset(
-            'assets/images/img_wishlist.png',
-            width: 24.0,
+          GestureDetector(
+            onTap: (){
+              wishlistProvider.setProduct(product);
+            },
+            child: Image.asset(
+              'assets/images/img_wishlist.png',
+              width: 24.0,
+            ),
           ),
         ],
       ),

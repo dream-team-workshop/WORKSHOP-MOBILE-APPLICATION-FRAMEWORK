@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:brk_mobile/models/user_model.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthService {
   String baseUrl = 'http://coffeein.sixeyes-tech.com/api';
@@ -62,7 +63,9 @@ class AuthService {
       var data = jsonDecode(response.body)['data'];
       UserModel user = UserModel.fromJson(data['user']);
       user.token = 'Bearer ' + data['access_token'];
-
+      // SharedPreferences localStorage = await SharedPreferences.getInstance();
+      // await localStorage.setString('token', user.token.toString());
+      // localStorage.setBool('isLogin', true);
       return user;
     } else {
       throw Exception('Gagal Login');

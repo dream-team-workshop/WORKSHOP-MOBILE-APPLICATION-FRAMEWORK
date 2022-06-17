@@ -10,8 +10,9 @@ class ProductCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: (){
-        Navigator.pushNamed(context, '/product');
+      onTap: () {
+        Navigator.push(context,
+            MaterialPageRoute(builder: (context) => ProductPage(product)));
       },
       child: Container(
         width: 215,
@@ -45,6 +46,9 @@ class ProductCard extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  const SizedBox(
+                    height: 6,
+                  ),
                   Text(
                     product.category!.name!,
                     style: primaryTextStyle.copyWith(
@@ -53,7 +57,7 @@ class ProductCard extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(
-                    height: 6,
+                    height: 2,
                   ),
                   Text(
                     '${product.name}',
@@ -62,6 +66,7 @@ class ProductCard extends StatelessWidget {
                       fontWeight: semiBold,
                     ),
                     overflow: TextOverflow.ellipsis,
+                    maxLines: 1,
                   ),
                   const SizedBox(
                     height: 6,

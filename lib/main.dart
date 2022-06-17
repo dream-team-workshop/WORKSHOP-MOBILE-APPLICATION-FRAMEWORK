@@ -7,6 +7,7 @@ import 'package:brk_mobile/pages/product_page.dart';
 import 'package:brk_mobile/pages/register_page.dart';
 import 'package:brk_mobile/providers/auth_provider.dart';
 import 'package:brk_mobile/providers/product_provider.dart';
+import 'package:brk_mobile/providers/wishlist_provider.dart';
 import 'package:brk_mobile/services/product_service.dart';
 import 'package:flutter/material.dart';
 import 'package:brk_mobile/pages/splash_page.dart';
@@ -28,7 +29,10 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider(
           create: (context) => ProductProvider(),
-        )
+        ),
+        ChangeNotifierProvider(
+          create: (context) => WishlistProvider(),
+        ),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
@@ -39,7 +43,7 @@ class MyApp extends StatelessWidget {
           '/home': (context) => MainPage(),
           '/detail-chat': (context) => DetailChatPage(),
           '/edit-profile': (context) => EditProfilePage(),
-          '/product': (context) => ProductPage(),
+          // '/product': (context) => ProductPage(context),
           '/cart': (context) => CartPage(),
         },
       ),

@@ -1,4 +1,5 @@
 import 'package:brk_mobile/models/product_model.dart';
+import 'package:brk_mobile/pages/product_page.dart';
 import 'package:brk_mobile/theme.dart';
 import 'package:flutter/material.dart';
 
@@ -9,8 +10,9 @@ class ProductTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: (){
-        Navigator.pushNamed(context, '/product');
+      onTap: () {
+        Navigator.push(context,
+            MaterialPageRoute(builder: (context) => ProductPage(product)));
       },
       child: Container(
         margin: EdgeInsets.only(

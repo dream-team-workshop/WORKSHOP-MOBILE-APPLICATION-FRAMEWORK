@@ -1,8 +1,15 @@
+import 'package:brk_mobile/models/product_model.dart';
+import 'package:brk_mobile/providers/product_provider.dart';
+import 'package:brk_mobile/providers/wishlist_provider.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:brk_mobile/theme.dart';
+import 'package:provider/provider.dart';
 
 class ProductPage extends StatefulWidget {
+  final ProductModel product;
+  ProductPage(this.product);
+
   @override
   State<ProductPage> createState() => _ProductPageState();
 }
@@ -15,10 +22,12 @@ class _ProductPageState extends State<ProductPage> {
   ];
 
   int currentIndex = 0;
-  bool isWishlist = false;
+  // bool isWishlist = false;
 
   @override
   Widget build(BuildContext context) {
+    WishlistProvider wishlistProvider = Provider.of<WishlistProvider>(context);
+
     Future<void> showSuccessDialog() async {
       return showDialog(
         context: context,
@@ -143,13 +152,14 @@ class _ProductPageState extends State<ProductPage> {
             ),
           ),
           CarouselSlider(
-            items: imageList
+            items: widget.product.galleries!
                 .map(
-                  (image) => Image.asset(
-                    image,
-                    width: MediaQuery.of(context).size.width,
+                  (image) => Image.network(
+                    image.url!,
+                    // width: MediaQuery.of(context).size.width,
+                    width: 300.0,
                     height: 310.0,
-                    // fit: BoxFit.cover,
+                    fit: BoxFit.cover,
                   ),
                 )
                 .toList(),
@@ -165,7 +175,7 @@ class _ProductPageState extends State<ProductPage> {
           const SizedBox(height: 10),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
-            children: imageList.map((e) {
+            children: widget.product.galleries!.map((e) {
               index++;
               return buildIndicator(index);
             }).toList(),
@@ -200,7 +210,8 @@ class _ProductPageState extends State<ProductPage> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'Iced Caramel Macchiato',
+                          // 'Iced Caramel Macchiato',
+                          widget.product.name!,
                           style: TextStyle(
                             fontSize: 18.0,
                             fontWeight: semiBold,
@@ -208,7 +219,8 @@ class _ProductPageState extends State<ProductPage> {
                         ),
                         const SizedBox(height: 5),
                         Text(
-                          'Minuman Dingin',
+                          // 'Minuman Dingin',
+                          widget.product.category!.name!,
                           style: primaryTextStyle.copyWith(
                             fontSize: 12.0,
                           ),
@@ -218,25 +230,33 @@ class _ProductPageState extends State<ProductPage> {
                   ),
                   GestureDetector(
                     onTap: () {
-                      setState(() {
-                        isWishlist = !isWishlist;
-                      });
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          backgroundColor:
-                              isWishlist ? secondaryColor : Colors.red,
-                          content: Text(
-                            isWishlist
-                                ? 'Item ditambahkan ke favorit'
-                                : 'Item dihapus dari favorit',
-                            textAlign: TextAlign.center,
+                      wishlistProvider.setProduct(widget.product);
+                      if (wishlistProvider.isWishlist(widget.product)) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            backgroundColor: secondaryColor,
+                            content: Text(
+                              'Item ditambahkan ke favorit',
+                              textAlign: TextAlign.center,
+                            ),
+                            duration: Duration(seconds: 2),
                           ),
-                          duration: Duration(seconds: 2),
-                        ),
-                      );
+                        );
+                      } else {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            backgroundColor: Colors.red,
+                            content: Text(
+                              'Item dihapus dari favorit',
+                              textAlign: TextAlign.center,
+                            ),
+                            duration: Duration(seconds: 2),
+                          ),
+                        );
+                      }
                     },
                     child: Image.asset(
-                      isWishlist
+                      wishlistProvider.isWishlist(widget.product)
                           ? 'assets/images/icon_wishlist_active.png'
                           : 'assets/images/icon_wishlist.png',
                       width: 30.0,
@@ -262,11 +282,12 @@ class _ProductPageState extends State<ProductPage> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    'Price starts from',
+                    'Harga mulai dari',
                     style: primaryTextStyle,
                   ),
                   Text(
-                    'Rp. 15.000',
+                    // 'Rp. 15.000',
+                    'Rp. ${widget.product.price}',
                     style: secondaryTextStyle.copyWith(
                       fontSize: 16,
                       fontWeight: semiBold,
@@ -294,7 +315,8 @@ class _ProductPageState extends State<ProductPage> {
                   ),
                   const SizedBox(height: 10.0),
                   Text(
-                    'Kami menambahkan susu kukus segar dan sirup rasa dolce kayu manis ke espresso klasik kami, di atasnya dengan krim kocok manis dan kayu manis...',
+                    // 'Kami menambahkan susu kukus segar dan sirup rasa dolce kayu manis ke espresso klasik kami, di atasnya dengan krim kocok manis dan kayu manis...',
+                    widget.product.description!,
                     style: subtitleTextStyle.copyWith(
                       fontWeight: light,
                     ),
@@ -310,7 +332,7 @@ class _ProductPageState extends State<ProductPage> {
               child: Row(
                 children: [
                   GestureDetector(
-                    onTap: (){
+                    onTap: () {
                       Navigator.pushNamed(context, '/detail-chat');
                     },
                     child: Container(

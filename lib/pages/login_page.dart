@@ -1,13 +1,13 @@
+import 'package:brk_mobile/models/user_model.dart';
 import 'package:brk_mobile/pages/register_page.dart';
 import 'package:brk_mobile/providers/auth_provider.dart';
 import 'package:brk_mobile/theme.dart';
 import 'package:brk_mobile/widgets/loading_button.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginPage extends StatefulWidget {
-  const LoginPage({super.key});
-
   @override
   State<LoginPage> createState() => _LoginPageState();
 }
@@ -21,15 +21,24 @@ class _LoginPageState extends State<LoginPage> {
 
   bool _isLoading = false;
 
+  // Future<void> checkLogin() async {
+  //   SharedPreferences localStorage = await SharedPreferences.getInstance();
+  //   var _login = localStorage.getBool('isLogin');
+  //   if (_login == true) {
+  //     Navigator.pushNamed(context, '/home');
+  //   }
+  // }
+
   @override
   void initState() {
     super.initState();
+    // checkLogin();
   }
 
   @override
   Widget build(BuildContext context) {
     AuthProvider authProvider = Provider.of<AuthProvider>(context);
-    // Handle Register
+    // Handle Login
     handleLogin() async {
       setState(() {
         _isLoading = true;
@@ -39,6 +48,9 @@ class _LoginPageState extends State<LoginPage> {
         email: emailController.text,
         password: passwordController.text,
       )) {
+        // SharedPreferences localStorage = await SharedPreferences.getInstance();
+        // localStorage.setString('token', _user.token.toString());
+        // localStorage.setBool('isLogin', true);
         Navigator.pushNamed(context, '/home');
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
