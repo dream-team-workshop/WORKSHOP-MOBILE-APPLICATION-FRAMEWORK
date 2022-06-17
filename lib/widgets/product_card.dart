@@ -15,8 +15,8 @@ class ProductCard extends StatelessWidget {
             MaterialPageRoute(builder: (context) => ProductPage(product)));
       },
       child: Container(
-        width: 215,
-        height: 278,
+        width: 190,
+        height: 268,
         margin: EdgeInsets.only(
           right: defaultMargin,
         ),
@@ -26,63 +26,15 @@ class ProductCard extends StatelessWidget {
           ),
           color: thirdColor,
         ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const SizedBox(
-              height: 30,
-            ),
-            Image.network(
+        child: ClipRRect(
+          borderRadius: BorderRadius.all(const Radius.circular(20)),
+        
+          child: Image.network(
               // 'assets/images/logo_coffein.png',
               product.galleries![0].url!,
-              height: 150,
-              width: 215,
               fit: BoxFit.cover,
             ),
-            Container(
-              margin: EdgeInsets.symmetric(
-                horizontal: 20,
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const SizedBox(
-                    height: 6,
-                  ),
-                  Text(
-                    product.category!.name!,
-                    style: primaryTextStyle.copyWith(
-                      fontSize: 12,
-                      color: Colors.white,
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 2,
-                  ),
-                  Text(
-                    '${product.name}',
-                    style: blackTextStyle.copyWith(
-                      fontSize: 18,
-                      fontWeight: semiBold,
-                    ),
-                    overflow: TextOverflow.ellipsis,
-                    maxLines: 1,
-                  ),
-                  const SizedBox(
-                    height: 6,
-                  ),
-                  Text(
-                    'Rp. ${product.price}',
-                    style: primaryTextStyle.copyWith(
-                      fontSize: 14,
-                      fontWeight: medium,
-                    ),
-                  ),
-                ],
-              ),
-            )
-          ],
-        ),
+        )
       ),
     );
   }

@@ -2,6 +2,7 @@ import 'package:brk_mobile/pages/home/chat_page.dart';
 import 'package:brk_mobile/pages/home/favorite_page.dart';
 import 'package:brk_mobile/pages/home/home_page.dart';
 import 'package:brk_mobile/pages/home/profile_page.dart';
+import 'package:brk_mobile/pages/map_page.dart';
 import 'package:brk_mobile/theme.dart';
 import 'package:flutter/material.dart';
 
@@ -20,7 +21,11 @@ class _MainPageState extends State<MainPage> {
     // Floating Action Button Location
     Widget buildLocationButton() {
       return FloatingActionButton(
-        onPressed: () {},
+        onPressed: () {
+          setState(() {
+            currentIndex = 2;
+          });
+        },
         backgroundColor: secondaryColor,
         child: Icon(Icons.location_on),
       );
@@ -118,7 +123,7 @@ class _MainPageState extends State<MainPage> {
           return ChatPage();
           break;
         case 2:
-          return HomePage();
+          return MapPage();
           break;
         case 3:
           return FavoritePage();

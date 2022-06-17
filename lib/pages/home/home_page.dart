@@ -2,6 +2,7 @@ import 'package:brk_mobile/models/user_model.dart';
 import 'package:brk_mobile/providers/auth_provider.dart';
 import 'package:brk_mobile/providers/product_provider.dart';
 import 'package:brk_mobile/theme.dart';
+import 'package:brk_mobile/widgets/product_item.dart';
 import 'package:brk_mobile/widgets/product_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:brk_mobile/widgets/product_card.dart';
@@ -37,8 +38,8 @@ class _HomePageState extends State<HomePage> {
       return Container(
         margin: EdgeInsets.only(
           top: 20,
-          left: 20,
-          right: 20,
+          left: 12,
+          right: 12,
         ),
         child: Row(
           children: [
@@ -249,7 +250,7 @@ class _HomePageState extends State<HomePage> {
           child: Row(
             children: [
               SizedBox(
-                width: defaultMargin,
+                width: 16,
               ),
               Consumer<ProductProvider>(
                   builder: (context, productProvider, child) {
@@ -288,13 +289,19 @@ class _HomePageState extends State<HomePage> {
             top: 14,
           ),
           child: Consumer<ProductProvider>(
-            builder: (context, productModel, child) => Column(
-              children: productModel.products
-                  .map(
-                    (product) => ProductTile(product),
-                  )
-                  .toList(),
+            builder: (context, productModel, child) => GridView.builder(
+            itemCount: productModel.products.length,
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            scrollDirection: Axis.vertical,
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+              mainAxisExtent: 280,
             ),
+            itemBuilder: (ctx, index) {
+              return ProductItem(product: productModel.products[index],);
+            },
+          ),
           ));
     }
 
