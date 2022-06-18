@@ -1,3 +1,5 @@
+import 'package:brk_mobile/models/product_model.dart';
+import 'package:brk_mobile/pages/detail_chat_page.dart';
 import 'package:flutter/material.dart';
 import 'package:brk_mobile/theme.dart';
 
@@ -8,7 +10,15 @@ class ChatTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: (){
-        Navigator.pushNamed(context, '/detail-chat');
+        Navigator.push(
+          context, 
+          MaterialPageRoute(
+            builder: (context) => DetailChatPage(
+              product:
+              UninitializedProductModel(),
+              ),
+              ),
+          );
       },
       child: Container(
         margin: EdgeInsets.only(

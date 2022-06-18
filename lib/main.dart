@@ -13,11 +13,18 @@ import 'package:brk_mobile/providers/product_provider.dart';
 import 'package:brk_mobile/providers/transaction_provider.dart';
 import 'package:brk_mobile/providers/wishlist_provider.dart';
 import 'package:brk_mobile/services/product_service.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:brk_mobile/pages/splash_page.dart';
 import 'package:provider/provider.dart';
 
-void main() => runApp(MyApp());
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+  runApp(MyApp());
+  
+  }
+
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -51,7 +58,6 @@ class MyApp extends StatelessWidget {
           '/login': (context) => LoginPage(),
           '/register': (context) => RegisterPage(),
           '/home': (context) => MainPage(),
-          '/detail-chat': (context) => DetailChatPage(),
           '/edit-profile': (context) => EditProfilePage(),
           // '/product': (context) => ProductPage(context),
           '/cart': (context) => CartPage(),

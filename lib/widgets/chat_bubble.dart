@@ -1,12 +1,17 @@
+import 'package:brk_mobile/models/product_model.dart';
 import 'package:brk_mobile/theme.dart';
 import 'package:flutter/material.dart';
 
 class ChatBubble extends StatelessWidget {
   String text;
   bool isSender;
-  bool hasProduct;
+  final ProductModel product;
 
-  ChatBubble({this.isSender = false, this.text = '', this.hasProduct = false});
+  ChatBubble({
+    this.isSender = false, 
+    this.text = '',
+    required this.product,
+    });
 
   @override
   Widget build(BuildContext context) {
@@ -122,7 +127,7 @@ class ChatBubble extends StatelessWidget {
         crossAxisAlignment:
             isSender ? CrossAxisAlignment.end : CrossAxisAlignment.start,
         children: [
-          hasProduct ? buildProductPreview() : SizedBox(),
+          product is UninitializedProductModel ? SizedBox() : buildProductPreview(),
           Row(
             mainAxisAlignment:
                 isSender ? MainAxisAlignment.end : MainAxisAlignment.start,
