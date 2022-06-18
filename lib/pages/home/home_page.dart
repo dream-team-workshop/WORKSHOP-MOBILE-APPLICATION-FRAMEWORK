@@ -30,6 +30,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     AuthProvider authProvider = Provider.of<AuthProvider>(context);
     UserModel user = authProvider.user;
+    print(user.token);
 
     ProductProvider productProvider = Provider.of<ProductProvider>(context);
     // productProvider.getProducts();
@@ -78,7 +79,7 @@ class _HomePageState extends State<HomePage> {
                     ),
                   ),
                   Text(
-                    '@${user.username}',
+                    '@${user.token}',
                     style: subtitleTextStyle.copyWith(
                       fontSize: 16,
                     ),

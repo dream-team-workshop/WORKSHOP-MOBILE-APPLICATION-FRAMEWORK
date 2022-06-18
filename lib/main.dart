@@ -1,4 +1,6 @@
 import 'package:brk_mobile/pages/cart_page.dart';
+import 'package:brk_mobile/pages/checkout_page.dart';
+import 'package:brk_mobile/pages/checkout_success_page.dart';
 import 'package:brk_mobile/pages/detail_chat_page.dart';
 import 'package:brk_mobile/pages/edit_profile.dart';
 import 'package:brk_mobile/pages/home/main_page.dart';
@@ -6,7 +8,9 @@ import 'package:brk_mobile/pages/login_page.dart';
 import 'package:brk_mobile/pages/product_page.dart';
 import 'package:brk_mobile/pages/register_page.dart';
 import 'package:brk_mobile/providers/auth_provider.dart';
+import 'package:brk_mobile/providers/cart_provider.dart';
 import 'package:brk_mobile/providers/product_provider.dart';
+import 'package:brk_mobile/providers/transaction_provider.dart';
 import 'package:brk_mobile/providers/wishlist_provider.dart';
 import 'package:brk_mobile/services/product_service.dart';
 import 'package:flutter/material.dart';
@@ -33,6 +37,12 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(
           create: (context) => WishlistProvider(),
         ),
+        ChangeNotifierProvider(
+          create: (context) => CartProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => TransactionProvider(),
+        ),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
@@ -45,6 +55,8 @@ class MyApp extends StatelessWidget {
           '/edit-profile': (context) => EditProfilePage(),
           // '/product': (context) => ProductPage(context),
           '/cart': (context) => CartPage(),
+          '/checkout': (context) => CheckoutPage(),
+          '/checkout-success': (context) => CheckoutSuccessPage(),
         },
       ),
     );
