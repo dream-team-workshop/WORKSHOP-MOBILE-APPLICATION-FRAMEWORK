@@ -1,4 +1,5 @@
 import 'package:brk_mobile/models/product_model.dart';
+import 'package:brk_mobile/pages/detail_chat_page.dart';
 import 'package:brk_mobile/providers/product_provider.dart';
 import 'package:brk_mobile/providers/wishlist_provider.dart';
 import 'package:carousel_slider/carousel_slider.dart';
@@ -333,7 +334,12 @@ class _ProductPageState extends State<ProductPage> {
                 children: [
                   GestureDetector(
                     onTap: () {
-                      Navigator.pushNamed(context, '/detail-chat');
+                      Navigator.push(
+                        context, 
+                        MaterialPageRoute(
+                          builder: (context) => DetailChatPage(product: widget.product),
+                          ),
+                        );
                     },
                     child: Container(
                       width: 54,
