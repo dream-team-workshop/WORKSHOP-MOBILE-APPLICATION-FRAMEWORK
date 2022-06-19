@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:brk_mobile/models/user_model.dart';
 import 'package:brk_mobile/pages/register_page.dart';
 import 'package:brk_mobile/providers/auth_provider.dart';
@@ -6,6 +8,8 @@ import 'package:brk_mobile/widgets/loading_button.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import '../networks/api.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -21,25 +25,25 @@ class _LoginPageState extends State<LoginPage> {
 
   bool _isLoading = false;
 
-  // Future<void> checkLogin() async {
-  //   SharedPreferences localStorage = await SharedPreferences.getInstance();
-  //   var _login = localStorage.getBool('isLogin');
-  //   if (_login == true) {
-  //     Navigator.pushNamed(context, '/home');
-  //   }
-  // }
+  Future<void> checkLogin() async {
+    SharedPreferences localStorage = await SharedPreferences.getInstance();
+    var _login = localStorage.getBool('isLogin');
+    if (_login == true) {
+      Navigator.pushNamed(context, '/home');
+    }
+  }
 
   @override
   void initState() {
     super.initState();
-    // checkLogin();
+    checkLogin();
   }
 
   @override
   Widget build(BuildContext context) {
     AuthProvider authProvider = Provider.of<AuthProvider>(context);
-    // Handle Login
-    handleLogin() async {
+    // Handle Login Old
+    handleLoginOld() async {
       setState(() {
         _isLoading = true;
       });
@@ -48,10 +52,10 @@ class _LoginPageState extends State<LoginPage> {
         email: emailController.text,
         password: passwordController.text,
       )) {
-        // SharedPreferences localStorage = await SharedPreferences.getInstance();
-        // localStorage.setString('token', _user.token.toString());
-        // localStorage.setBool('isLogin', true);
-        Navigator.pushNamed(context, '/home');
+        SharedPreferences localStorage = await SharedPreferences.getInstance();
+        localStorage.setString('token', authProvider.user.token!);
+        localStorage.setBool('isLogin', true);
+        Navigator.pushReplacementNamed(context, '/home');
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
@@ -68,6 +72,37 @@ class _LoginPageState extends State<LoginPage> {
         _isLoading = false;
       });
     }
+
+    // Handle Login New
+    // void handleLoginNew() async {
+    //   setState(() {
+    //     _isLoading = true;
+    //   });
+
+    //   var email = emailController.text.toString();
+    //   var password = passwordController.text.toString();
+
+    //   var data = {'email': email, 'password': password};
+
+    //   var res = await Network().auth(data, '/login');
+    //   var body = json.decode(res.body);
+    //   if (body['meta']['code'] == 200) {
+    //     UserModel.fromJson(body['data']['user']);
+    //     SharedPreferences localStorage = await SharedPreferences.getInstance();
+    //     await localStorage.setString(
+    //         'token', jsonEncode(body['data']['access_token']));
+    //     print(json.encode(body['data']['access_token']));
+    //     localStorage.setBool('isLogin', true);
+    //     Navigator.pushNamed(context, '/home');
+    //   } else {
+    //     print(body['meta']['code']);
+    //     print("$email $password");
+    //   }
+
+    //   setState(() {
+    //     _isLoading = false;
+    //   });
+    // }
 
     // Header Image
     Widget buildHeaderImage() {
@@ -267,7 +302,7 @@ class _LoginPageState extends State<LoginPage> {
         width: double.infinity,
         margin: const EdgeInsets.only(top: 15),
         child: TextButton(
-          onPressed: handleLogin,
+          onPressed: handleLoginOld,
           style: TextButton.styleFrom(
             backgroundColor: primaryColor,
             shape: RoundedRectangleBorder(

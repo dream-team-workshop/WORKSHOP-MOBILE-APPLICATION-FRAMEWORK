@@ -5,6 +5,7 @@ import 'package:brk_mobile/pages/home/profile_page.dart';
 import 'package:brk_mobile/pages/map_page.dart';
 import 'package:brk_mobile/theme.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({super.key});
@@ -15,6 +16,12 @@ class MainPage extends StatefulWidget {
 
 class _MainPageState extends State<MainPage> {
   int currentIndex = 0;
+
+  Future<void> getToken() async{
+    SharedPreferences localStorage = await SharedPreferences.getInstance();
+    String token = localStorage.getString('token')!;
+    print(token);
+  }
 
   @override
   Widget build(BuildContext context) {

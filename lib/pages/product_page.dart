@@ -1,9 +1,9 @@
 import 'package:brk_mobile/models/product_model.dart';
-<<<<<<< HEAD
+// <<<<<<< HEAD
 import 'package:brk_mobile/providers/cart_provider.dart';
-=======
+// =======
 import 'package:brk_mobile/pages/detail_chat_page.dart';
->>>>>>> cdae98de1a5dd8fdd4b1d5926d6b34dd4fd04b7d
+// >>>>>>> cdae98de1a5dd8fdd4b1d5926d6b34dd4fd04b7d
 import 'package:brk_mobile/providers/product_provider.dart';
 import 'package:brk_mobile/providers/wishlist_provider.dart';
 import 'package:carousel_slider/carousel_slider.dart';

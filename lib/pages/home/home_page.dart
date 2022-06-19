@@ -1,4 +1,5 @@
 import 'package:brk_mobile/models/user_model.dart';
+import 'package:brk_mobile/networks/api.dart';
 import 'package:brk_mobile/providers/auth_provider.dart';
 import 'package:brk_mobile/providers/product_provider.dart';
 import 'package:brk_mobile/theme.dart';
@@ -28,12 +29,10 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    AuthProvider authProvider = Provider.of<AuthProvider>(context);
-    UserModel user = authProvider.user;
-    print(user.token);
-
     ProductProvider productProvider = Provider.of<ProductProvider>(context);
     // productProvider.getProducts();
+    // UserModel user = Network().user;
+    // print(user);
 
     Widget header() {
       return Container(
@@ -44,18 +43,6 @@ class _HomePageState extends State<HomePage> {
         ),
         child: Row(
           children: [
-            // Container(
-            //   width: 54,
-            //   height: 54,
-            //   decoration: BoxDecoration(
-            //     shape: BoxShape.circle,
-            //     image: DecorationImage(
-            //       image: NetworkImage(
-            //         user.profilePhotoUrl!,
-            //       ),
-            //     ),
-            //   ),
-            // ),
             Container(
               width: 54,
               height: 54,
@@ -72,14 +59,16 @@ class _HomePageState extends State<HomePage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Hallo, ${user.name}',
+                    // 'Hallo, ${user.name}',
+                    'Hallo',
                     style: primaryTextStyle.copyWith(
                       fontSize: 20,
                       fontWeight: semiBold,
                     ),
                   ),
                   Text(
-                    '@${user.token}',
+                    // '@${user.token}',
+                    '@username',
                     style: subtitleTextStyle.copyWith(
                       fontSize: 16,
                     ),

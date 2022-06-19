@@ -1,18 +1,23 @@
+import 'dart:convert';
+
 import 'package:brk_mobile/models/user_model.dart';
+import 'package:brk_mobile/networks/api.dart';
+import 'package:brk_mobile/pages/login_page.dart';
 import 'package:brk_mobile/providers/auth_provider.dart';
+import 'package:brk_mobile/services/auth_service.dart';
 import 'package:brk_mobile/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key});
 
   @override
   Widget build(BuildContext context) {
+    // AuthProvider authProvider = Provider.of<AuthProvider>(context);
+    // UserModel user = authProvider.user;
 
-    AuthProvider authProvider = Provider.of<AuthProvider>(context);
-    UserModel user = authProvider.user;
-    
     Widget buildHeader() {
       return AppBar(
         backgroundColor: whiteColor,
@@ -40,14 +45,16 @@ class ProfilePage extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Hallo, ${user.name}',
+                      // 'Hallo, ${user.name}',
+                      'Hallo',
                       style: primaryTextStyle.copyWith(
                         fontSize: 20.0,
                         fontWeight: semiBold,
                       ),
                     ),
                     Text(
-                      '@${user.username}',
+                      // '@${user.username}',
+                      '@username',
                       style: subtitleTextStyle.copyWith(
                         fontSize: 16.0,
                       ),
@@ -55,16 +62,21 @@ class ProfilePage extends StatelessWidget {
                   ],
                 ),
               ),
-              GestureDetector(
-                onTap: () {
-                  Navigator.pushNamedAndRemoveUntil(
-                      context, '/login', (route) => false);
-                },
-                child: Image.asset(
-                  'assets/images/exit_button.png',
-                  width: 20,
-                ),
-              ),
+              Builder(builder: (context) {
+                return GestureDetector(
+                  onTap: () async {
+                    SharedPreferences localStorage =
+                        await SharedPreferences.getInstance();
+                    await localStorage.clear();
+                    Navigator.pushNamedAndRemoveUntil(
+                        context, '/login', (route) => false);
+                  },
+                  child: Image.asset(
+                    'assets/images/exit_button.png',
+                    width: 20,
+                  ),
+                );
+              }),
             ],
           ),
         )),

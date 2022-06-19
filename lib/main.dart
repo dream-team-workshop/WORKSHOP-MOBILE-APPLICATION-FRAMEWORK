@@ -1,11 +1,10 @@
+import 'package:brk_mobile/networks/api.dart';
 import 'package:brk_mobile/pages/cart_page.dart';
 import 'package:brk_mobile/pages/checkout_page.dart';
 import 'package:brk_mobile/pages/checkout_success_page.dart';
-import 'package:brk_mobile/pages/detail_chat_page.dart';
 import 'package:brk_mobile/pages/edit_profile.dart';
 import 'package:brk_mobile/pages/home/main_page.dart';
 import 'package:brk_mobile/pages/login_page.dart';
-import 'package:brk_mobile/pages/product_page.dart';
 import 'package:brk_mobile/pages/register_page.dart';
 import 'package:brk_mobile/providers/auth_provider.dart';
 import 'package:brk_mobile/providers/cart_provider.dart';
@@ -37,6 +36,9 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(
           create: (context) => AuthProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => Network(),
         ),
         ChangeNotifierProvider(
           create: (context) => ProductProvider(),

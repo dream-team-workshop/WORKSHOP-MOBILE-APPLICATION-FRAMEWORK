@@ -1,3 +1,4 @@
+import 'package:brk_mobile/networks/api.dart';
 import 'package:brk_mobile/services/auth_service.dart';
 import 'package:flutter/material.dart';
 import 'package:brk_mobile/models/user_model.dart';
@@ -35,9 +36,7 @@ class AuthProvider with ChangeNotifier {
         email: email,
         password: password,
       );
-      // SharedPreferences localStorage = await SharedPreferences.getInstance();
-      // localStorage.setString('token', user.token.toString());
-      // localStorage.setBool('isLogin', true);
+      
       _user = user;
       return true;
     } catch (e) {

@@ -1,10 +1,12 @@
 import 'dart:convert';
-import 'package:http/http.dart' as http;
 import 'package:brk_mobile/models/user_model.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
-class AuthService {
-  String baseUrl = 'http://coffeein.sixeyes-tech.com/api';
+class Network with ChangeNotifier {
+  final String baseURL = 'http://coffeein.sixeyes-tech.com/api';
+
   var token;
 
   getToken() async {
@@ -12,38 +14,12 @@ class AuthService {
     token = jsonDecode(localStorage.getString('token')!)['token'];
   }
 
-  Future<UserModel> register({
-    String? name,
-    String? username,
-    String? email,
-    String? password,
-  }) async {
-    var url = '$baseUrl/register';
-    var headers = {'Content-Type': 'apllication/json'};
-    var body = jsonEncode({
-      'name': name,
-      'username': username,
-      'email': email,
-      'password': password,
-    });
-
-    var response = await http.post(
-      Uri.parse(url),
-      headers: headers,
-      body: body,
+  auth(data, apiURL) async {
+    return await http.post(
+      Uri.parse(baseURL + apiURL),
+      body: jsonEncode(data),
+      headers: _setHeaders(),
     );
-
-    print(response.body);
-
-    if (response.statusCode == 200) {
-      var data = jsonDecode(response.body)['data'];
-      UserModel user = UserModel.fromJson(data['user']);
-      user.token = 'Bearer ' + data['access_token'];
-
-      return user;
-    } else {
-      throw Exception('Gagal Register');
-    }
   }
 
   _setHeaders() => {
@@ -56,25 +32,22 @@ class AuthService {
     String? email,
     String? password,
   }) async {
-    var url = '$baseUrl/login';
-    var headers = _setHeaders();
+    var url = '$baseURL/login';
     var body = jsonEncode({
       'email': email,
       'password': password,
     });
-
-    var response = await http.post(
-      Uri.parse(url),
-      headers: headers,
-      body: body,
+    var response =
+        await http.post(Uri.parse(url), headers: _setHeaders(), body: body);
+    print(
+      response.body,
     );
-
-    print(response.body);
-
     if (response.statusCode == 200) {
       var data = jsonDecode(response.body)['data'];
       UserModel user = UserModel.fromJson(data['user']);
-      user.token = 'Bearer' + data['access_token'];
+      SharedPreferences localStorage = await SharedPreferences.getInstance();
+      var _token = data['access_token'];
+      localStorage.setString(token, _token);
       return user;
     } else {
       throw Exception('Gagal Login!');
@@ -88,7 +61,7 @@ class AuthService {
     int max = long - 1;
     var subToken = token1.substring(1, max);
     var apiURL = '/logout';
-    var full = baseUrl + apiURL;
+    var full = baseURL + apiURL;
     var url = Uri.parse(full);
     Map<String, String> headers = {
       'Content-type': 'application/json',
