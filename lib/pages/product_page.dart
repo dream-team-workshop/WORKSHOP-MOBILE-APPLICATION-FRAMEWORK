@@ -1,9 +1,14 @@
 import 'package:brk_mobile/models/product_model.dart';
 // <<<<<<< HEAD
+// <<<<<<< HEAD
 import 'package:brk_mobile/providers/cart_provider.dart';
 // =======
 import 'package:brk_mobile/pages/detail_chat_page.dart';
 // >>>>>>> cdae98de1a5dd8fdd4b1d5926d6b34dd4fd04b7d
+// =======
+import 'package:brk_mobile/pages/detail_chat_page.dart';
+import 'package:brk_mobile/providers/cart_provider.dart';
+// >>>>>>> 0ab11979a3b78230531b75d781ab285339d80c47
 import 'package:brk_mobile/providers/product_provider.dart';
 import 'package:brk_mobile/providers/wishlist_provider.dart';
 import 'package:carousel_slider/carousel_slider.dart';

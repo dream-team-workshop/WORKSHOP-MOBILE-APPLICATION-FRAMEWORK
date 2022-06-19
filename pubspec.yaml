@@ -47,6 +47,7 @@ dependencies:
   google_maps_flutter: ^2.1.1
   geolocator: ^8.1.1
   geocoding:
+  smooth_page_indicator:
 
 dev_dependencies:
   flutter_test:
