@@ -58,7 +58,7 @@ class ProductTile extends StatelessWidget {
                     height: 6,
                   ),
                   Text(
-                    product.price!,
+                    product.price!.toString(),
                     style: primaryTextStyle.copyWith(
                       fontWeight: medium,
                     ),

@@ -61,7 +61,9 @@ class FavoritePage extends StatelessWidget {
               Container(
                 height: 44,
                 child: TextButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.pushNamedAndRemoveUntil(context, '/home', (route) => false);
+                  },
                   style: TextButton.styleFrom(
                     padding: EdgeInsets.symmetric(
                       vertical: 10.0,
