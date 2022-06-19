@@ -1,5 +1,7 @@
 import 'dart:async';
 
+import 'package:brk_mobile/pages/login_page.dart';
+import 'package:brk_mobile/pages/on_boarding_page.dart';
 import 'package:brk_mobile/providers/product_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -14,19 +16,35 @@ class SplashPage extends StatefulWidget {
 class _SplashPageState extends State<SplashPage> {
   @override
   void initState() {
-    getInit();
-
+ 
     super.initState();
+
+       getInit();
+    startSplashScreen();
+
   }
 
   getInit() async {
     await Provider.of<ProductProvider>(context, listen: false).getProducts;
 
-    Navigator.pushReplacementNamed(context, '/login');
     // Timer(
     //   Duration(seconds: 3),
     //   (() => Navigator.pushReplacementNamed(context, '/login')),
     // );
+  }
+
+   startSplashScreen() async {
+    var duration = const Duration(seconds: 2);
+    return Timer(
+      duration,
+      () {
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(
+            builder: (context) => const OnBoardingScreen(),
+          ),
+        );
+      },
+    );
   }
 
   @override
