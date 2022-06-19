@@ -16,12 +16,10 @@ class SplashPage extends StatefulWidget {
 class _SplashPageState extends State<SplashPage> {
   @override
   void initState() {
- 
     super.initState();
 
-       getInit();
+    getInit();
     startSplashScreen();
-
   }
 
   getInit() async {
@@ -33,8 +31,8 @@ class _SplashPageState extends State<SplashPage> {
     // );
   }
 
-   startSplashScreen() async {
-    var duration = const Duration(seconds: 2);
+  startSplashScreen() async {
+    var duration = const Duration(seconds: 3);
     return Timer(
       duration,
       () {

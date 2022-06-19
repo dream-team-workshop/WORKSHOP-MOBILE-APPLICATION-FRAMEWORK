@@ -52,9 +52,12 @@ class _LoginPageState extends State<LoginPage> {
         email: emailController.text,
         password: passwordController.text,
       )) {
+        // UserModel userNow = authProvider.user;
+        // print(userNow.token);
         SharedPreferences localStorage = await SharedPreferences.getInstance();
         localStorage.setString('token', authProvider.user.token!);
         localStorage.setBool('isLogin', true);
+        UserModel user = authProvider.user;
         Navigator.pushReplacementNamed(context, '/home');
       } else {
         ScaffoldMessenger.of(context).showSnackBar(

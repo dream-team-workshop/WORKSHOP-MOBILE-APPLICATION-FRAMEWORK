@@ -23,6 +23,7 @@ class AuthProvider with ChangeNotifier {
       );
 
       _user = user;
+      notifyListeners();
       return true;
     } catch (e) {
       print(e);
@@ -36,8 +37,9 @@ class AuthProvider with ChangeNotifier {
         email: email,
         password: password,
       );
-      
+
       _user = user;
+      notifyListeners();
       return true;
     } catch (e) {
       print(e);

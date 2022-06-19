@@ -2,6 +2,7 @@ import 'package:brk_mobile/models/user_model.dart';
 import 'package:brk_mobile/networks/api.dart';
 import 'package:brk_mobile/providers/auth_provider.dart';
 import 'package:brk_mobile/providers/product_provider.dart';
+import 'package:brk_mobile/services/auth_service.dart';
 import 'package:brk_mobile/theme.dart';
 import 'package:brk_mobile/widgets/product_item.dart';
 import 'package:brk_mobile/widgets/product_tile.dart';
@@ -16,7 +17,6 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-
   @override
   void initState() {
     // TODO: implement initState
@@ -30,9 +30,8 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     ProductProvider productProvider = Provider.of<ProductProvider>(context);
-    // productProvider.getProducts();
-    // UserModel user = Network().user;
-    // print(user);
+    // AuthProvider authProvider = Provider.of<AuthProvider>(context);
+    // UserModel user = authProvider.user;
 
     Widget header() {
       return Container(
@@ -41,56 +40,72 @@ class _HomePageState extends State<HomePage> {
           left: 12,
           right: 12,
         ),
-        child: Row(
-          children: [
-            Container(
-              width: 54,
-              height: 54,
-              child: GestureDetector(
-                onTap: () {},
-                child: Icon(
-                  Icons.person,
-                  size: 30,
-                ),
-              ),
-            ),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    // 'Hallo, ${user.name}',
-                    'Hallo',
-                    style: primaryTextStyle.copyWith(
-                      fontSize: 20,
-                      fontWeight: semiBold,
+        child: Column(children: [
+          FutureBuilder<UserModel>(
+            future: AuthService().getDataUserNow(),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return Center(
+                  child: CircularProgressIndicator(),
+                );
+              }
+              UserModel user = snapshot.data!;
+              return Padding(
+                padding: EdgeInsets.all(4),
+                child: Row(
+                  children: [
+                    Container(
+                      width: 54,
+                      height: 54,
+                      child: GestureDetector(
+                        onTap: () {},
+                        child: Icon(
+                          Icons.person,
+                          size: 30,
+                        ),
+                      ),
                     ),
-                  ),
-                  Text(
-                    // '@${user.token}',
-                    '@username',
-                    style: subtitleTextStyle.copyWith(
-                      fontSize: 16,
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Hallo, ${user.name}',
+                            // 'Hallo',
+                            style: primaryTextStyle.copyWith(
+                              fontSize: 20,
+                              fontWeight: semiBold,
+                            ),
+                          ),
+                          Text(
+                            // '@${user.token}',
+                            '@username',
+                            style: subtitleTextStyle.copyWith(
+                              fontSize: 16,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                ],
-              ),
-            ),
-            Container(
-              width: 54,
-              height: 54,
-              child: GestureDetector(
-                onTap: () {
-                  Navigator.pushNamed(context, '/cart');
-                },
-                child: Icon(
-                  Icons.shopping_cart,
-                  size: 30,
+                    Container(
+                      width: 54,
+                      height: 54,
+                      child: GestureDetector(
+                        onTap: () {
+                          Navigator.pushNamed(context, '/cart');
+                        },
+                        child: Icon(
+                          Icons.shopping_cart,
+                          size: 30,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
-              ),
-            ),
-          ],
-        ),
+              );
+            },
+          ),
+        ]),
       );
     }
 
@@ -280,18 +295,20 @@ class _HomePageState extends State<HomePage> {
           ),
           child: Consumer<ProductProvider>(
             builder: (context, productModel, child) => GridView.builder(
-            itemCount: productModel.products.length,
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            scrollDirection: Axis.vertical,
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
-              mainAxisExtent: 280,
+              itemCount: productModel.products.length,
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              scrollDirection: Axis.vertical,
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                mainAxisExtent: 280,
+              ),
+              itemBuilder: (ctx, index) {
+                return ProductItem(
+                  product: productModel.products[index],
+                );
+              },
             ),
-            itemBuilder: (ctx, index) {
-              return ProductItem(product: productModel.products[index],);
-            },
-          ),
           ));
     }
 
