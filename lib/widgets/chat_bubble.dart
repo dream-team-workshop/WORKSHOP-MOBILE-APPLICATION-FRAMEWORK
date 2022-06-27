@@ -5,12 +5,12 @@ import 'package:flutter/material.dart';
 class ChatBubble extends StatelessWidget {
   String text;
   bool isSender;
-  final ProductModel product;
+  final ProductModel? product;
 
   ChatBubble({
     this.isSender = false, 
     this.text = '',
-    required this.product,
+    this.product,
     });
 
   @override
@@ -43,8 +43,8 @@ class ChatBubble extends StatelessWidget {
               children: [
                 ClipRRect(
                   borderRadius: BorderRadius.circular(12),
-                  child: Image.asset(
-                    'assets/images/img_product_chat.png',
+                  child: Image.network(
+                    product!.galleries![0].url!,
                     width: 70,
                   ),
                 ),
@@ -56,14 +56,14 @@ class ChatBubble extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Cinnamon Doice Latte',
+                        product!.name!,
                         style: primaryTextStyle,
                       ),
                       const SizedBox(
                         height: 4,
                       ),
                       Text(
-                        'Rp. 30.000',
+                        'Rp. ${product!.price!}',
                         style: secondaryTextStyle.copyWith(
                           fontWeight: medium,
                         ),

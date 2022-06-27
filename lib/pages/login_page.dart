@@ -1,8 +1,13 @@
 import 'dart:convert';
 
+import 'package:brk_mobile/models/user.dart';
 import 'package:brk_mobile/models/user_model.dart';
+import 'package:brk_mobile/pages/home/home_page.dart';
+import 'package:brk_mobile/pages/home/main_page.dart';
 import 'package:brk_mobile/pages/register_page.dart';
 import 'package:brk_mobile/providers/auth_provider.dart';
+import 'package:brk_mobile/providers/new_auth_provider.dart';
+import 'package:brk_mobile/providers/user_provider.dart';
 import 'package:brk_mobile/theme.dart';
 import 'package:brk_mobile/widgets/loading_button.dart';
 import 'package:flutter/material.dart';
@@ -23,13 +28,22 @@ class _LoginPageState extends State<LoginPage> {
   TextEditingController emailController = TextEditingController(text: '');
   TextEditingController passwordController = TextEditingController(text: '');
 
+  //KODINGAN BARU UNTUK LOGIN
+  final formKey = new GlobalKey<FormState>();
+
+  String? _username, _password;
+  //BATAS KODINGAN BARU
+
   bool _isLoading = false;
 
   Future<void> checkLogin() async {
     SharedPreferences localStorage = await SharedPreferences.getInstance();
     var _login = localStorage.getBool('isLogin');
     if (_login == true) {
-      Navigator.pushNamed(context, '/home');
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => MainPage()),
+      );
     }
   }
 
@@ -42,6 +56,50 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     AuthProvider authProvider = Provider.of<AuthProvider>(context);
+
+    //KODINGAN BARU UNTUK LOGIN
+    NewAuthProvider authNew = Provider.of<NewAuthProvider>(context);
+
+    doLogin() async {
+      // setState(() {
+      //   _isLoading = true;
+      // });
+      if (emailController.text == '' || passwordController.text == '') {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          backgroundColor: Color.fromARGB(255, 244, 158, 54),
+          content: Text(
+            'username atau password harus diisi',
+            textAlign: TextAlign.center,
+          ),
+        ));
+      } else {
+        final Future<Map<String, dynamic>> successfullMessage =
+            authNew.login(emailController.text, passwordController.text);
+
+        successfullMessage.then((response) {
+          if (response['status']) {
+            User user = response['user'];
+            Provider.of<UserProvider>(context, listen: false).setUser(user);
+            Navigator.pushNamedAndRemoveUntil(
+                context, '/home', (route) => false);
+          } else {
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+              backgroundColor: Colors.red,
+              content: Text(
+                'Gagal Login! \n username atau password salah!',
+                textAlign: TextAlign.center,
+              ),
+            ));
+          }
+        });
+
+        // setState(() {
+        //   _isLoading = false;
+        // });
+      }
+    }
+    //BATAS KODINGAN BARU
+
     // Handle Login Old
     handleLoginOld() async {
       setState(() {
@@ -54,10 +112,11 @@ class _LoginPageState extends State<LoginPage> {
       )) {
         // UserModel userNow = authProvider.user;
         // print(userNow.token);
-        SharedPreferences localStorage = await SharedPreferences.getInstance();
-        localStorage.setString('token', authProvider.user.token!);
-        localStorage.setBool('isLogin', true);
-        UserModel user = authProvider.user;
+        // SharedPreferences localStorage = await SharedPreferences.getInstance();
+        // await localStorage.setString('token', authProvider.user.token!);
+        // localStorage.setBool('isLogin', true);
+        // print(authProvider.user.token);
+        // UserModel user = authProvider.user;
         Navigator.pushReplacementNamed(context, '/home');
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -77,48 +136,57 @@ class _LoginPageState extends State<LoginPage> {
     }
 
     // Handle Login New
-    // void handleLoginNew() async {
-    //   setState(() {
-    //     _isLoading = true;
-    //   });
+    void handleLoginNew() async {
+      setState(() {
+        _isLoading = true;
+      });
 
-    //   var email = emailController.text.toString();
-    //   var password = passwordController.text.toString();
+      var email = emailController.text.toString();
+      var password = passwordController.text.toString();
 
-    //   var data = {'email': email, 'password': password};
+      var data = {'email': email, 'password': password};
 
-    //   var res = await Network().auth(data, '/login');
-    //   var body = json.decode(res.body);
-    //   if (body['meta']['code'] == 200) {
-    //     UserModel.fromJson(body['data']['user']);
-    //     SharedPreferences localStorage = await SharedPreferences.getInstance();
-    //     await localStorage.setString(
-    //         'token', jsonEncode(body['data']['access_token']));
-    //     print(json.encode(body['data']['access_token']));
-    //     localStorage.setBool('isLogin', true);
-    //     Navigator.pushNamed(context, '/home');
-    //   } else {
-    //     print(body['meta']['code']);
-    //     print("$email $password");
-    //   }
+      var res = await Network().auth(data, '/login');
+      var body = json.decode(res.body);
+      if (body['meta']['code'] == 200) {
+        UserModel.fromJson(body['data']['user']);
+        SharedPreferences localStorage = await SharedPreferences.getInstance();
+        print(json.encode(body['data']['access_token']));
+        localStorage.setBool('isLogin', true);
+        Navigator.pushNamed(context, '/home');
+      } else {
+        print(body['meta']['code']);
+        print("$email $password");
+      }
 
-    //   setState(() {
-    //     _isLoading = false;
-    //   });
-    // }
+      setState(() {
+        _isLoading = false;
+      });
+    }
 
     // Header Image
     Widget buildHeaderImage() {
       return Center(
-        child: Container(
-          margin: EdgeInsets.fromLTRB(0, 20, 0, 20),
-          width: 120,
-          height: 120,
-          decoration: const BoxDecoration(
-            image: DecorationImage(
-              image: AssetImage('assets/images/logo_coffein.png'),
+        child: Column(
+          children: [
+            Container(
+              margin: EdgeInsets.fromLTRB(0, 20, 0, 10),
+              width: 120,
+              height: 120,
+              decoration: const BoxDecoration(
+                image: DecorationImage(
+                  image: AssetImage('assets/images/logo_coffein.png'),
+                ),
+              ),
             ),
-          ),
+            // Text(
+            //   'CoffeeIn',
+            //   style: primaryTextStyle.copyWith(
+            //     fontSize: 24,
+            //     fontWeight: bold,
+            //   ),
+            // ),
+          ],
         ),
       );
     }
@@ -128,20 +196,24 @@ class _LoginPageState extends State<LoginPage> {
       return Container(
         width: double.infinity,
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            const SizedBox(
+              height: 12,
+            ),
             Text(
-              'Welcome in Coffeein',
+              'Masuk',
               style: primaryTextStyle.copyWith(
-                fontSize: 24,
-                fontWeight: bold,
+                fontSize: 22,
+                fontWeight: semiBold,
               ),
+              textAlign: TextAlign.left,
             ),
             const SizedBox(
-              height: 5,
+              height: 8,
             ),
             Text(
-              'Sign In to Continue',
+              'Silahkan masuk ke aplikasi menngunakan akun anda',
               style: subtitleTextStyle,
             ),
           ],
@@ -152,7 +224,7 @@ class _LoginPageState extends State<LoginPage> {
     // Form Email
     Widget buildEmailInput() {
       return Container(
-        margin: const EdgeInsets.only(top: 35),
+        margin: const EdgeInsets.only(top: 24),
         child: Container(
           alignment: Alignment.centerLeft,
           height: 55,
@@ -183,7 +255,7 @@ class _LoginPageState extends State<LoginPage> {
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
                 ),
-                hintText: 'Your Email Address',
+                hintText: 'Masukkan Email',
                 hintStyle: subtitleTextStyle.copyWith(fontSize: 14)),
           ),
         ),
@@ -233,7 +305,7 @@ class _LoginPageState extends State<LoginPage> {
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
                 ),
-                hintText: 'Password',
+                hintText: 'Masukkan Kata Sandi',
                 hintStyle: subtitleTextStyle.copyWith(fontSize: 14)),
           ),
         ),
@@ -286,7 +358,7 @@ class _LoginPageState extends State<LoginPage> {
               }),
             ),
             Text(
-              'Remember Me',
+              'Ingatkan saya',
               style: subtitleTextStyle.copyWith(
                 fontSize: 14,
                 fontWeight: light,
@@ -305,7 +377,7 @@ class _LoginPageState extends State<LoginPage> {
         width: double.infinity,
         margin: const EdgeInsets.only(top: 15),
         child: TextButton(
-          onPressed: handleLoginOld,
+          onPressed: doLogin,
           style: TextButton.styleFrom(
             backgroundColor: primaryColor,
             shape: RoundedRectangleBorder(
@@ -313,7 +385,7 @@ class _LoginPageState extends State<LoginPage> {
             ),
           ),
           child: Text(
-            'Login',
+            'Masuk',
             style: subtitleTextStyle.copyWith(
                 fontSize: 16, fontWeight: bold, color: Colors.white),
           ),
@@ -335,7 +407,7 @@ class _LoginPageState extends State<LoginPage> {
             ),
           ),
           Text(
-            "OR",
+            "atau",
             style: subtitleTextStyle.copyWith(
               fontSize: 16,
               fontWeight: light,
@@ -382,18 +454,18 @@ class _LoginPageState extends State<LoginPage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
-              'Don\'t have an account? ',
+              'Belum punya akun? ',
               style: primaryTextStyle.copyWith(fontSize: 14),
             ),
             InkWell(
               onTap: () {
-                Navigator.push(
+                Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(builder: (context) => RegisterPage()),
                 );
               },
               child: Text(
-                "Register",
+                "Daftar Yuk",
                 style: primaryTextStyle.copyWith(
                   fontSize: 14,
                   fontWeight: semiBold,
@@ -422,7 +494,10 @@ class _LoginPageState extends State<LoginPage> {
                   buildPasswordInput(),
                   buildForgotPassword(),
                   buildRememberMe(),
-                  _isLoading ? LoadingButton() : buildLoginButton(),
+                  // _isLoading ? LoadingButton() : buildLoginButton(),
+                  authNew.loggedInStatus == Status.authenticating
+                      ? LoadingButton()
+                      : buildLoginButton(),
                   buildDivider(),
                   buildOtherLoginMethodsSection(),
                   const SizedBox(height: 25),

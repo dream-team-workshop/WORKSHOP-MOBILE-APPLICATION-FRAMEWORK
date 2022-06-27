@@ -1,4 +1,5 @@
 import 'package:brk_mobile/models/product_model.dart';
+import 'package:brk_mobile/models/user.dart';
 // <<<<<<< HEAD
 // <<<<<<< HEAD
 import 'package:brk_mobile/providers/cart_provider.dart';
@@ -72,7 +73,7 @@ class _ProductPageState extends State<ProductPage> {
                     height: 12,
                   ),
                   Text(
-                    'Success',
+                    'Berhasil',
                     style: primaryTextStyle.copyWith(
                       fontSize: 18,
                       fontWeight: semiBold,
@@ -105,7 +106,7 @@ class _ProductPageState extends State<ProductPage> {
                         ),
                       ),
                       child: Text(
-                        'View My Cart',
+                        'Lihat Keranjang',
                         style: whiteTextStyle.copyWith(
                           fontSize: 16,
                           fontWeight: medium,
@@ -349,7 +350,7 @@ class _ProductPageState extends State<ProductPage> {
                       Navigator.push(
                         context, 
                         MaterialPageRoute(
-                          builder: (context) => DetailChatPage(product: widget.product),
+                          builder: (context) => DetailChatPage(widget.product, UninitializedUser()),
                           ),
                         );
                     },
@@ -400,9 +401,9 @@ class _ProductPageState extends State<ProductPage> {
                           backgroundColor: primaryColor,
                         ),
                         child: Text(
-                          'Order Now',
+                          'Pesan Sekarang',
                           style: whiteTextStyle.copyWith(
-                              fontSize: 16.0, fontWeight: semiBold),
+                              fontSize: 16.0, fontWeight: medium),
                         ),
                       ),
                     ),

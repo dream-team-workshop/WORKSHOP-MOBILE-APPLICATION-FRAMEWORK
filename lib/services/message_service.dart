@@ -3,23 +3,48 @@ import 'package:brk_mobile/models/product_model.dart';
 import 'package:brk_mobile/models/user_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+import '../models/user.dart';
+
 class MessageService {
   FirebaseFirestore firestore = FirebaseFirestore.instance;
-  Stream<QuerySnapshot> getMessagesByUserId({required int userId}) {
-    print("Checking 0...");
+  // Stream<QuerySnapshot> getMessagesByUserId({required int userId}) {
+  //   print("Checking 0...");
+  //   try {
+  //     return firestore
+  //         .collection('messages')
+  //         .where('userId', isEqualTo: userId)
+  //         .snapshots();
+  //   } catch (e) {
+  //     print("Checking error... $e");
+  //     throw Exception(e);
+  //   }
+  // }
+
+  Stream<List<MessageModel>> getMessagesByUserId({int? userId}) {
     try {
       return firestore
           .collection('messages')
           .where('userId', isEqualTo: userId)
-          .snapshots();
+          .snapshots()
+          .map((QuerySnapshot list) {
+        var result = list.docs.map<MessageModel>((DocumentSnapshot message) {
+          print(message.data());
+          return MessageModel.fromJson(message.data() as Map<String, dynamic>);
+        }).toList();
+
+        result.sort(
+          (MessageModel a, MessageModel b) =>
+              a.createdAt.compareTo(b.createdAt),
+        );
+        return result;
+      });
     } catch (e) {
-      print("Checking error... $e");
       throw Exception(e);
     }
   }
 
   Future<void> addMessage({
-    required UserModel user,
+    required User user,
     required bool isFromUser,
     required String message,
     required ProductModel product,

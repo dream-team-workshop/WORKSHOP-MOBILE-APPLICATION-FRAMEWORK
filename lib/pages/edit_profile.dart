@@ -4,14 +4,38 @@ import 'package:flutter/material.dart';
 import 'package:brk_mobile/theme.dart';
 import 'package:provider/provider.dart';
 
-class EditProfilePage extends StatelessWidget {
-  const EditProfilePage({super.key});
+import '../preferences/userPreferences.dart';
+
+class EditProfilePage extends StatefulWidget {
+  String nama, username, email;
+  EditProfilePage(this.nama, this.username, this.email);
+
+  @override
+  State<EditProfilePage> createState() => _EditProfilePageState();
+}
+
+class _EditProfilePageState extends State<EditProfilePage> {
+  // void getUserData() {
+  //   UserPreferences().getUser().then((value) {
+  //     print("value: $value");
+  //     nama = value.name!;
+  //     username = value.username!;
+  //     token = value.token!;
+  //     print(nama);
+  //     print(username);
+  //   });
+  // }
+
+  @override
+  void initState() {
+    super.initState();
+    // getUserData();
+  }
 
   @override
   Widget build(BuildContext context) {
-    
-    AuthProvider authProvider = Provider.of<AuthProvider>(context);
-    UserModel user = authProvider.user;
+    // AuthProvider authProvider = Provider.of<AuthProvider>(context);
+    // UserModel user = authProvider.user;
 
     Widget buildNameInput() {
       return Container(
@@ -22,7 +46,7 @@ class EditProfilePage extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Name',
+              'Nama',
               style: subtitleTextStyle.copyWith(
                 fontSize: 13,
                 fontWeight: medium,
@@ -34,7 +58,7 @@ class EditProfilePage extends StatelessWidget {
                 fontWeight: medium,
               ),
               decoration: InputDecoration(
-                hintText: user.name,
+                hintText: widget.nama,
                 hintStyle: primaryTextStyle.copyWith(
                   fontSize: 14,
                   fontWeight: light,
@@ -72,7 +96,7 @@ class EditProfilePage extends StatelessWidget {
                 fontWeight: medium,
               ),
               decoration: InputDecoration(
-                hintText: '@${user.username}',
+                hintText: '@${widget.username}',
                 hintStyle: primaryTextStyle.copyWith(
                   fontSize: 14,
                   fontWeight: light,
@@ -110,7 +134,7 @@ class EditProfilePage extends StatelessWidget {
                 fontWeight: medium,
               ),
               decoration: InputDecoration(
-              hintText: user.email,
+                hintText: widget.email,
                 hintStyle: primaryTextStyle.copyWith(
                   fontSize: 14,
                   fontWeight: light,

@@ -1,24 +1,68 @@
+import 'package:brk_mobile/models/message_model.dart';
 import 'package:brk_mobile/models/product_model.dart';
+import 'package:brk_mobile/models/user.dart';
 import 'package:brk_mobile/pages/detail_chat_page.dart';
 import 'package:flutter/material.dart';
 import 'package:brk_mobile/theme.dart';
 
-class ChatTile extends StatelessWidget {
-  const ChatTile({super.key});
+import '../preferences/userPreferences.dart';
+import '../providers/user_provider.dart';
 
+class ChatTile extends StatefulWidget {
+  final MessageModel message;
+  final User user;
+  ChatTile(this.message, this.user);
+
+  @override
+  State<ChatTile> createState() => _ChatTileState();
+}
+
+class _ChatTileState extends State<ChatTile> {
+
+  int? id;
+  String? nama, username, token;
+  User userDataToSave = new User();
+
+  void getUserData() {
+    UserPreferences().getUser().then((value) {
+      print("value: $value");
+      id = value.id!;
+      nama = value.name!;
+      username = value.username!;
+      token = value.token!;
+      print(id);
+      print(nama);
+      print(username);
+      userDataToSave = value;
+      print(userDataToSave.name);
+      print(userDataToSave.username);
+      print(userDataToSave.email);
+      print(userDataToSave.profilePhotoUrl);
+      print(userDataToSave.token);
+
+      UserProvider().setUser(value);
+    });
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getUserData();
+  }
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: (){
+      onTap: () {
         Navigator.push(
-          context, 
+          context,
           MaterialPageRoute(
             builder: (context) => DetailChatPage(
-              product:
               UninitializedProductModel(),
-              ),
-              ),
-          );
+              widget.user,
+            ),
+          ),
+        );
       },
       child: Container(
         margin: EdgeInsets.only(
@@ -40,13 +84,16 @@ class ChatTile extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Coffe Store',
+                        'Penjual Kopi',
                         style: primaryTextStyle.copyWith(
                           fontSize: 15,
                         ),
                       ),
+                      const SizedBox(
+                        height: 4,
+                      ),
                       Text(
-                        'Good night, This item is on lorem ipsum dolor sit amet',
+                        widget.message.message,
                         style: primaryTextStyle.copyWith(
                           fontSize: 12,
                           fontWeight: light,
@@ -57,7 +104,8 @@ class ChatTile extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  'Now',
+                  'Sekarang',
+                  // message.updatedAt.toString(),
                   style: primaryTextStyle.copyWith(
                     fontSize: 10,
                   ),

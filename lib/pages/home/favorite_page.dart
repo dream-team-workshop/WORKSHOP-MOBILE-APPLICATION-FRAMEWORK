@@ -1,3 +1,4 @@
+import 'package:brk_mobile/providers/page_provider.dart';
 import 'package:brk_mobile/providers/wishlist_provider.dart';
 import 'package:brk_mobile/theme.dart';
 import 'package:brk_mobile/widgets/wishlist_card.dart';
@@ -11,13 +12,14 @@ class FavoritePage extends StatelessWidget {
   Widget build(BuildContext context) {
 
     WishlistProvider wishlistProvider = Provider.of<WishlistProvider>(context);
+    PageProvier pageProvier = Provider.of<PageProvier>(context);
 
     Widget buildHeader() {
       return AppBar(
         backgroundColor: primaryColor,
         centerTitle: true,
         title: Text(
-          'Favorite Coffe\'s',
+          'Kopi Favorit',
           style: whiteTextStyle.copyWith(
             fontSize: 18,
             fontWeight: medium,
@@ -44,7 +46,7 @@ class FavoritePage extends StatelessWidget {
                 height: 24.0,
               ),
               Text(
-                'You don\'t have dream coffe\'s?',
+                'Belum ada kopi yang disukai',
                 style: primaryTextStyle.copyWith(
                   fontSize: 16,
                   fontWeight: medium,
@@ -53,7 +55,7 @@ class FavoritePage extends StatelessWidget {
               const SizedBox(
                 height: 12,
               ),
-              Text('Let\'s find your favorite coffe\'s',
+              Text('Ayo temukan kopi favoritmu',
                   style: subtitleTextStyle),
               const SizedBox(
                 height: 20,
@@ -62,7 +64,7 @@ class FavoritePage extends StatelessWidget {
                 height: 44,
                 child: TextButton(
                   onPressed: () {
-                    Navigator.pushNamedAndRemoveUntil(context, '/home', (route) => false);
+                    pageProvier.currentIndex =0;
                   },
                   style: TextButton.styleFrom(
                     padding: EdgeInsets.symmetric(
@@ -75,7 +77,7 @@ class FavoritePage extends StatelessWidget {
                     ),
                   ),
                   child: Text(
-                    'Explore Store',
+                    'Telusuri Kopi',
                     style: whiteTextStyle.copyWith(
                       fontSize: 16,
                       fontWeight: medium,

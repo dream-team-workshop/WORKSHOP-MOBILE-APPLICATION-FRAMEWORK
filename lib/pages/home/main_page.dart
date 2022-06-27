@@ -3,8 +3,10 @@ import 'package:brk_mobile/pages/home/favorite_page.dart';
 import 'package:brk_mobile/pages/home/home_page.dart';
 import 'package:brk_mobile/pages/home/profile_page.dart';
 import 'package:brk_mobile/pages/map_page.dart';
+import 'package:brk_mobile/providers/page_provider.dart';
 import 'package:brk_mobile/theme.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class MainPage extends StatefulWidget {
@@ -15,22 +17,53 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> {
-  int currentIndex = 0;
-
-  Future<void> getToken() async{
+  Future<void> getToken() async {
     SharedPreferences localStorage = await SharedPreferences.getInstance();
     String token = localStorage.getString('token')!;
     print(token);
   }
 
+  //ON BACK PRESSED
+  Future<bool> _onWillPop(BuildContext context) async {
+    bool? exitResult = await showDialog(
+        context: context, builder: (context) => _buildExitDialog(context));
+    return exitResult ?? false;
+  }
+
+  Future<bool?> _showExitDialog(BuildContext context) async {
+    return await showDialog(
+      context: context,
+      builder: (context) => _buildExitDialog(context),
+    );
+  }
+
+  AlertDialog _buildExitDialog(BuildContext context) {
+    return AlertDialog(
+      title: const Text('Please confirm'),
+      content: const Text('Do you want to exit the app?'),
+      actions: <Widget>[
+        TextButton(
+          onPressed: () => Navigator.of(context).pop(false),
+          child: Text('No'),
+        ),
+        TextButton(
+          onPressed: () => Navigator.of(context).pop(true),
+          child: Text('Yes'),
+        ),
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
+    PageProvier pageProvier = Provider.of<PageProvier>(context);
+
     // Floating Action Button Location
     Widget buildLocationButton() {
       return FloatingActionButton(
         onPressed: () {
           setState(() {
-            currentIndex = 2;
+            pageProvier.currentIndex = 2;
           });
         },
         backgroundColor: secondaryColor,
@@ -48,11 +81,9 @@ class _MainPageState extends State<MainPage> {
           clipBehavior: Clip.antiAlias,
           child: BottomNavigationBar(
               backgroundColor: backgroundColor2,
-              currentIndex: currentIndex,
+              currentIndex: pageProvier.currentIndex,
               onTap: (value) {
-                setState(() {
-                  currentIndex = value;
-                });
+                pageProvier.currentIndex = value;
               },
               type: BottomNavigationBarType.fixed,
               items: [
@@ -61,8 +92,9 @@ class _MainPageState extends State<MainPage> {
                     margin: EdgeInsets.only(top: 8, bottom: 3),
                     child: Icon(
                       Icons.home,
-                      color:
-                          currentIndex == 0 ? primaryColor : Color(0xff808191),
+                      color: pageProvier.currentIndex == 0
+                          ? primaryColor
+                          : Color(0xff808191),
                       size: 22,
                     ),
                   ),
@@ -73,8 +105,9 @@ class _MainPageState extends State<MainPage> {
                     margin: EdgeInsets.only(top: 8, bottom: 3),
                     child: Icon(
                       Icons.chat,
-                      color:
-                          currentIndex == 1 ? primaryColor : Color(0xff808191),
+                      color: pageProvier.currentIndex == 1
+                          ? primaryColor
+                          : Color(0xff808191),
                       size: 22,
                     ),
                   ),
@@ -85,8 +118,9 @@ class _MainPageState extends State<MainPage> {
                     margin: EdgeInsets.only(top: 8, bottom: 3),
                     child: Icon(
                       Icons.home,
-                      color:
-                          currentIndex == 2 ? primaryColor : Color(0xff808191),
+                      color: pageProvier.currentIndex == 2
+                          ? primaryColor
+                          : Color(0xff808191),
                       size: 22,
                     ),
                   ),
@@ -97,8 +131,9 @@ class _MainPageState extends State<MainPage> {
                     margin: EdgeInsets.only(top: 8, bottom: 3),
                     child: Icon(
                       Icons.favorite,
-                      color:
-                          currentIndex == 3 ? primaryColor : Color(0xff808191),
+                      color: pageProvier.currentIndex == 3
+                          ? primaryColor
+                          : Color(0xff808191),
                       size: 22,
                     ),
                   ),
@@ -109,8 +144,9 @@ class _MainPageState extends State<MainPage> {
                     margin: EdgeInsets.only(top: 8, bottom: 3),
                     child: Icon(
                       Icons.person,
-                      color:
-                          currentIndex == 4 ? primaryColor : Color(0xff808191),
+                      color: pageProvier.currentIndex == 4
+                          ? primaryColor
+                          : Color(0xff808191),
                       size: 22,
                     ),
                   ),
@@ -122,7 +158,7 @@ class _MainPageState extends State<MainPage> {
     }
 
     Widget body() {
-      switch (currentIndex) {
+      switch (pageProvier.currentIndex) {
         case 0:
           return HomePage();
           break;
@@ -139,15 +175,18 @@ class _MainPageState extends State<MainPage> {
           return ProfilePage();
           break;
         default:
-        return HomePage();
+          return HomePage();
       }
     }
 
-    return Scaffold(
-      floatingActionButton: buildLocationButton(),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      bottomNavigationBar: buildCustomBottomNav(),
-      body: body(),
+    return WillPopScope(
+      onWillPop: () => _onWillPop(context),
+      child: Scaffold(
+        floatingActionButton: buildLocationButton(),
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+        bottomNavigationBar: buildCustomBottomNav(),
+        body: body(),
+      ),
     );
   }
 }

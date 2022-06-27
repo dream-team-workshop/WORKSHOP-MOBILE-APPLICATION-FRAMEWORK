@@ -7,14 +7,14 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class SplashPage extends StatefulWidget {
-  const SplashPage({super.key});
+class SplashPageToOnBoard extends StatefulWidget {
+  const SplashPageToOnBoard({super.key});
 
   @override
-  State<SplashPage> createState() => _SplashPageState();
+  State<SplashPageToOnBoard> createState() => _SplashPageToOnBoardState();
 }
 
-class _SplashPageState extends State<SplashPage> {
+class _SplashPageToOnBoardState extends State<SplashPageToOnBoard> {
 
   @override
   void initState() {
@@ -35,7 +35,7 @@ class _SplashPageState extends State<SplashPage> {
       () {
         Navigator.of(context).pushReplacement(
           MaterialPageRoute(
-            builder: (context) => LoginPage(),
+            builder: (context) => OnBoardingScreen(),
           ),
         );
       },

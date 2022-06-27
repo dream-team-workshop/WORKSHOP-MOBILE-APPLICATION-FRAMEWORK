@@ -25,7 +25,7 @@ class CartPage extends StatelessWidget {
               height: 20.0,
             ),
             Text(
-              'Opss!, Your Cart is Empty',
+              'Ups! Keranjang kosong',
               style: primaryTextStyle.copyWith(
                 fontSize: 16,
                 fontWeight: medium,
@@ -35,7 +35,7 @@ class CartPage extends StatelessWidget {
               height: 12.0,
             ),
             Text(
-              'Let\'s find your favorite coffe\'s',
+              'Ayo temukan kopi favoritmu',
               style: subtitleTextStyle,
             ),
             Container(
@@ -58,7 +58,7 @@ class CartPage extends StatelessWidget {
                     ),
                   ),
                   child: Text(
-                    'Explore Store',
+                    'Telusuri Kopi',
                     style: whiteTextStyle.copyWith(
                       fontSize: 16,
                       fontWeight: medium,

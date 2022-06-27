@@ -1,10 +1,11 @@
-import 'package:brk_mobile/providers/auth_provider.dart';
 import 'package:brk_mobile/providers/cart_provider.dart';
 import 'package:brk_mobile/providers/transaction_provider.dart';
 import 'package:brk_mobile/widgets/checkout_card.dart';
 import 'package:flutter/material.dart';
 import 'package:brk_mobile/theme.dart';
 import 'package:provider/provider.dart';
+
+import '../preferences/userPreferences.dart';
 
 class CheckoutPage extends StatefulWidget {
   const CheckoutPage({super.key});
@@ -14,17 +15,40 @@ class CheckoutPage extends StatefulWidget {
 }
 
 class _CheckoutPageState extends State<CheckoutPage> {
+
+  String? nama, username, token;
+
+  void getUserData() {
+    UserPreferences().getUser().then((value) {
+      print("value: $value");
+      nama = value.name!;
+      username = value.username!;
+      token = 'Bearer ' + value.token!;
+      print(nama);
+      print(username);
+      print(token);
+    });
+  }
+
+  @override
+  void initState() {
+    getUserData();
+    super.initState();
+  }
+  
   @override
   Widget build(BuildContext context) {
-
     CartProvider cartProvider = Provider.of<CartProvider>(context);
-    TransactionProvider transactionProvider = Provider.of<TransactionProvider>(context);
-    AuthProvider authProvider = Provider.of<AuthProvider>(context);
+    TransactionProvider transactionProvider =
+        Provider.of<TransactionProvider>(context);
+    // AuthProvider authProvider = Provider.of<AuthProvider>(context);
 
     handleCheckout() async {
-      if (await transactionProvider.checkout(authProvider.user.token!, cartProvider.carts, cartProvider.totalPrice())) {
+      if (await transactionProvider.checkout(token!,
+          cartProvider.carts, cartProvider.totalPrice())) {
         cartProvider.carts = [];
-        Navigator.pushNamedAndRemoveUntil(context, '/checkout-success', (route) => false);
+        Navigator.pushNamedAndRemoveUntil(
+            context, '/checkout-success', (route) => false);
       }
     }
 
@@ -46,7 +70,9 @@ class _CheckoutPageState extends State<CheckoutPage> {
                   ),
                 ),
                 Column(
-                  children: cartProvider.carts.map((cart) => CheckoutCard(cart)).toList(),
+                  children: cartProvider.carts
+                      .map((cart) => CheckoutCard(cart))
+                      .toList(),
                 )
               ],
             ),

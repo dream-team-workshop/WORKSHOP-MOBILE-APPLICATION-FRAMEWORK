@@ -1,10 +1,16 @@
+import 'dart:async';
+
 import 'package:brk_mobile/pages/login_page.dart';
 import 'package:brk_mobile/providers/auth_provider.dart';
+import 'package:brk_mobile/providers/new_auth_provider.dart';
 import 'package:brk_mobile/widgets/loading_button.dart';
 import 'package:flutter/material.dart';
 import 'package:brk_mobile/theme.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+
+import '../models/user.dart';
+import '../providers/user_provider.dart';
 
 class RegisterPage extends StatefulWidget {
   @override
@@ -26,9 +32,71 @@ class _RegisterPageState extends State<RegisterPage> {
     super.initState();
   }
 
+  //ON BACK PRESSED
+  Future<bool> _onWillPop(BuildContext context) async {
+    bool? exitResult = await showDialog(
+        context: context, builder: (context) => _buildExitDialog(context));
+    return exitResult ?? false;
+  }
+
+  Future<bool?> _showExitDialog(BuildContext context) async {
+    return await showDialog(
+      context: context,
+      builder: (context) => _buildExitDialog(context),
+    );
+  }
+
+  AlertDialog _buildExitDialog(BuildContext context) {
+    return AlertDialog(
+      title: const Text('Please confirm'),
+      content: const Text('Do you want to exit the app?'),
+      actions: <Widget>[
+        TextButton(
+          onPressed: () => Navigator.of(context).pop(false),
+          child: Text('No'),
+        ),
+        TextButton(
+          onPressed: () => Navigator.of(context).pop(true),
+          child: Text('Yes'),
+        ),
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     AuthProvider authProvider = Provider.of<AuthProvider>(context);
+
+    //KODING BARU REGISTER
+    NewAuthProvider newAuthProvider = Provider.of<NewAuthProvider>(context);
+
+    doRegister() async {
+      final Future<Map<String, dynamic>> successfullMessage =
+          newAuthProvider.register(nameController.text, usernameController.text,
+              emailController.text, passwordController.text);
+      successfullMessage.then(
+        (response) {
+          if (response['status']) {
+            User user = response['user'];
+            Provider.of<UserProvider>(context, listen: false).setUser(user);
+            Navigator.pushNamedAndRemoveUntil(
+                context, '/home', (route) => false);
+          } else {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                backgroundColor: Colors.red,
+                content: Text(
+                  'Gagal Register!',
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            );
+          }
+        },
+      );
+    }
+    //BATAS KODING BARU
+
     // Handle Register
     handleRegister() async {
       setState(() {
@@ -63,7 +131,7 @@ class _RegisterPageState extends State<RegisterPage> {
     Widget buildHeaderImage() {
       return Center(
         child: Container(
-          margin: EdgeInsets.fromLTRB(0, 20, 0, 20),
+          margin: EdgeInsets.fromLTRB(0, 20, 0, 10),
           width: 120,
           height: 120,
           decoration: const BoxDecoration(
@@ -80,13 +148,21 @@ class _RegisterPageState extends State<RegisterPage> {
       return Container(
         width: double.infinity,
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const SizedBox(
-              height: 5,
+              height: 12,
             ),
             Text(
-              'Please  register your account first. You still don\'t have an account?',
+              'Resigtrasi',
+              style:
+                  primaryTextStyle.copyWith(fontSize: 22, fontWeight: semiBold),
+            ),
+            const SizedBox(
+              height: 8,
+            ),
+            Text(
+              'Lakukan registrasi akun anda untuk menggunakan aplikasi',
               style: subtitleTextStyle,
             ),
           ],
@@ -260,7 +336,7 @@ class _RegisterPageState extends State<RegisterPage> {
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
                 ),
-                hintText: 'Password',
+                hintText: 'Masukkan Kata Sandi',
                 hintStyle: subtitleTextStyle.copyWith(fontSize: 14)),
           ),
         ),
@@ -309,7 +385,7 @@ class _RegisterPageState extends State<RegisterPage> {
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
                 ),
-                hintText: 'Confirm Password',
+                hintText: 'Konfirmasi Kata Sandi',
                 hintStyle: subtitleTextStyle.copyWith(fontSize: 14)),
           ),
         ),
@@ -323,7 +399,7 @@ class _RegisterPageState extends State<RegisterPage> {
         width: double.infinity,
         margin: const EdgeInsets.only(top: 15),
         child: TextButton(
-          onPressed: handleRegister,
+          onPressed: doRegister,
           style: TextButton.styleFrom(
             backgroundColor: primaryColor,
             shape: RoundedRectangleBorder(
@@ -331,7 +407,7 @@ class _RegisterPageState extends State<RegisterPage> {
             ),
           ),
           child: Text(
-            'Register',
+            'Daftar',
             style: subtitleTextStyle.copyWith(
                 fontSize: 16, fontWeight: bold, color: Colors.white),
           ),
@@ -347,7 +423,7 @@ class _RegisterPageState extends State<RegisterPage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
-              'Already have account? ',
+              'Sudah punya akun? ',
               style: primaryTextStyle.copyWith(fontSize: 14),
             ),
             InkWell(
@@ -358,7 +434,7 @@ class _RegisterPageState extends State<RegisterPage> {
                 );
               },
               child: Text(
-                "Login",
+                "Masuk",
                 style: primaryTextStyle.copyWith(
                   fontSize: 14,
                   fontWeight: semiBold,
@@ -371,32 +447,35 @@ class _RegisterPageState extends State<RegisterPage> {
       );
     }
 
-    return Scaffold(
-      resizeToAvoidBottomInset: false,
-      body: SafeArea(
-        child: Container(
-          margin: EdgeInsets.symmetric(horizontal: defaultMargin),
-          child: SingleChildScrollView(
-            child: Container(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  buildHeaderImage(),
-                  buildHeaderTittle(),
-                  buildFullNameInput(),
-                  buildUsernameInput(),
-                  buildEmailInput(),
-                  buildPasswordInput(),
-                  buildConfirmPasswordInput(),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  _isLoading ? LoadingButton() : buildRegisterButton(),
-                  const SizedBox(
-                    height: 25,
-                  ),
-                  buildFooter(),
-                ],
+    return WillPopScope(
+      onWillPop: () => _onWillPop(context),
+      child: Scaffold(
+        resizeToAvoidBottomInset: false,
+        body: SafeArea(
+          child: Container(
+            margin: EdgeInsets.symmetric(horizontal: defaultMargin),
+            child: SingleChildScrollView(
+              child: Container(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    buildHeaderImage(),
+                    buildHeaderTittle(),
+                    buildFullNameInput(),
+                    buildUsernameInput(),
+                    buildEmailInput(),
+                    buildPasswordInput(),
+                    buildConfirmPasswordInput(),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    _isLoading ? LoadingButton() : buildRegisterButton(),
+                    const SizedBox(
+                      height: 25,
+                    ),
+                    buildFooter(),
+                  ],
+                ),
               ),
             ),
           ),
